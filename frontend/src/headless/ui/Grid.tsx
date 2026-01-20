@@ -1,23 +1,23 @@
-import { forwardRef } from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '@/libs/cn';
-import { Box, type BoxProps } from './Box';
-import type { PolymorphicRef } from '../polymorphics';
+import { cn } from '@/utils/cn'
+import { cva, type VariantProps } from 'class-variance-authority'
+import { forwardRef } from 'react'
+import type { PolymorphicRef } from '../polymorphics'
+import { Box, type BoxProps } from './Box'
 
 type GridProps<C extends React.ElementType = 'div'> = BoxProps<C> & {
-  className?: string;
-  style?: React.CSSProperties;
-  display?: 'grid' | 'inline-grid' | 'none';
-  columns?: GridVariants['columns'];
-  rows?: GridVariants['rows'];
-  align?: GridVariants['align'];
-  justify?: GridVariants['justify'];
-  gap?: number;
-  gapX?: number;
-  gapY?: number;
-};
+  className?: string
+  style?: React.CSSProperties
+  display?: 'grid' | 'inline-grid' | 'none'
+  columns?: GridVariants['columns']
+  rows?: GridVariants['rows']
+  align?: GridVariants['align']
+  justify?: GridVariants['justify']
+  gap?: number
+  gapX?: number
+  gapY?: number
+}
 
-type GridVariants = VariantProps<typeof gridVariants>;
+type GridVariants = VariantProps<typeof gridVariants>
 
 export const Grid = forwardRef(function Grid<
   C extends React.ElementType = 'div',
@@ -48,10 +48,10 @@ export const Grid = forwardRef(function Grid<
       ref={ref}
       {...(rest as BoxProps<C>)}
     />
-  );
+  )
 }) as <C extends React.ElementType = 'div'>(
   props: GridProps<C> & { ref?: PolymorphicRef<C> },
-) => JSX.Element;
+) => JSX.Element
 
 const gridVariants = cva('grid', {
   variants: {
@@ -97,4 +97,4 @@ const gridVariants = cva('grid', {
       stretch: 'place-items-stretch',
     },
   },
-});
+})

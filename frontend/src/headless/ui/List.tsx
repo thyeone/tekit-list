@@ -1,23 +1,20 @@
-import { Fragment } from 'react';
-import { Divider } from '@/headless/ui/Divider';
-import { cn } from '@/libs/cn';
-import { Flex } from '@/headless/ui/Flex';
+import { Divider } from '@/headless/ui/Divider'
+import { Flex } from '@/headless/ui/Flex'
+import { cn } from '@/utils/cn'
+import { Fragment } from 'react'
 
 type ListProps<T> = Omit<React.ComponentProps<typeof Flex>, 'children'> & {
-  data: T[];
-  renderItem: (
-    data: T,
-    index: number,
-  ) => JSX.Element | boolean | null | undefined;
-  renderEmpty?: () => JSX.Element | boolean | null | undefined;
-  direction?: 'row' | 'col';
-  className?: string;
-  nonEmptyClassName?: string;
-  divider?: JSX.Element;
-  dividerOptions?: React.ComponentProps<typeof Divider>;
-  hasDivider?: boolean;
-  bottomElement?: JSX.Element;
-};
+  data: T[]
+  renderItem: (data: T, index: number) => React.ReactNode
+  renderEmpty?: () => React.ReactNode
+  direction?: 'row' | 'col'
+  className?: string
+  nonEmptyClassName?: string
+  divider?: React.ReactNode
+  dividerOptions?: React.ComponentProps<typeof Divider>
+  hasDivider?: boolean
+  bottomElement?: React.ReactNode
+}
 
 export function List<T>({
   data,
@@ -51,9 +48,9 @@ export function List<T>({
                   index !== data.length - 1 &&
                   (divider || <Divider {...dividerOptions} />)}
               </Fragment>
-            );
+            )
           })}
       {bottomElement}
     </Flex>
-  );
+  )
 }

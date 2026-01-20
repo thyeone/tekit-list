@@ -1,11 +1,11 @@
-import { cn } from '@/libs/cn';
-import { useId } from 'react';
-import { Flex } from './ui/Flex';
-import { Icon } from './icon/Icon';
+import { cn } from '@/utils/cn'
+import { useId } from 'react'
+import { Icon } from './icon/Icon'
+import { Flex } from './ui/Flex'
 
 type CheckBoxProps = React.InputHTMLAttributes<HTMLInputElement> & {
-  label: string;
-};
+  label: string
+}
 
 export function Radio({
   checked,
@@ -14,7 +14,7 @@ export function Radio({
   className,
   ...rest
 }: CheckBoxProps) {
-  const id = useId();
+  const id = useId()
 
   return (
     <Flex align="center" gap={6} className="py-4">
@@ -46,12 +46,12 @@ export function Radio({
       </label>
       <label
         htmlFor={id}
-        className={cn('cursor-pointer text-[16px] font-medium', {
+        className={cn('cursor-pointer font-medium text-[16px]', {
           'cursor-default text-gray-200': rest.disabled,
         })}
       >
         {label}
       </label>
     </Flex>
-  );
+  )
 }

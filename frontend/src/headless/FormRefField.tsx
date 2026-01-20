@@ -1,22 +1,22 @@
+import { cn } from '@/utils/cn'
+import type React from 'react'
 import {
   Controller,
-  ControllerFieldState,
-  ControllerProps,
-  FieldValues,
-} from 'react-hook-form';
-import React from 'react';
-import { cn } from '@/libs/cn';
+  type ControllerFieldState,
+  type ControllerProps,
+  type FieldValues,
+} from 'react-hook-form'
 
 type FormFieldWrapperProps<T extends FieldValues> = Omit<
   ControllerProps<T>,
   'render'
 > & {
-  tabIndex?: number;
-  className?: string;
+  tabIndex?: number
+  className?: string
   children:
     | ((fieldState: ControllerFieldState) => React.ReactNode)
-    | React.ReactNode;
-};
+    | React.ReactNode
+}
 
 export const FormRefField = <T extends FieldValues>({
   control,
@@ -38,4 +38,4 @@ export const FormRefField = <T extends FieldValues>({
       </div>
     )}
   />
-);
+)

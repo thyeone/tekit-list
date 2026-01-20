@@ -1,19 +1,19 @@
-import { cn } from '@/libs/cn';
-import { type VariantProps, cva } from 'class-variance-authority';
+import { cn } from '@/utils/cn'
+import { type VariantProps, cva } from 'class-variance-authority'
 import {
   type ComponentPropsWithoutRef,
   type ReactNode,
   type Ref,
   forwardRef,
   useState,
-} from 'react';
+} from 'react'
 
-type ImgElementStyle = NonNullable<JSX.IntrinsicElements['img']['style']>;
+type ImgElementStyle = NonNullable<JSX.IntrinsicElements['img']['style']>
 
 type ObjectFitProps = Extract<
   ImgElementStyle['objectFit'],
   'contain' | 'cover' | 'fill' | 'none' | 'scale-down'
->;
+>
 type ObjectPositionProps = Extract<
   ImgElementStyle['objectPosition'],
   | 'center'
@@ -25,7 +25,7 @@ type ObjectPositionProps = Extract<
   | 'top-right'
   | 'bottom-left'
   | 'bottom-right'
->;
+>
 
 const imageVariants = cva('', {
   variants: {
@@ -52,19 +52,19 @@ const imageVariants = cva('', {
       false: null,
     },
   },
-});
+})
 
-type ImageVariantsProps = VariantProps<typeof imageVariants>;
+type ImageVariantsProps = VariantProps<typeof imageVariants>
 
 type ImageProps = ComponentPropsWithoutRef<'img'> & {
-  objectFit?: ImageVariantsProps['objectFit'];
-  objectPosition?: ImageVariantsProps['objectPosition'];
-  fallback?: ReactNode;
-  errorFallback?: ReactNode;
-  isError?: boolean;
-  isLoading?: boolean;
-  fill?: boolean;
-};
+  objectFit?: ImageVariantsProps['objectFit']
+  objectPosition?: ImageVariantsProps['objectPosition']
+  fallback?: ReactNode
+  errorFallback?: ReactNode
+  isError?: boolean
+  isLoading?: boolean
+  fill?: boolean
+}
 
 export const Image = forwardRef(function Image(
   props: ImageProps,
@@ -84,22 +84,22 @@ export const Image = forwardRef(function Image(
     objectPosition,
     fill,
     ...rest
-  } = props;
-  const [_isLoading, setIsLoading] = useState(true);
-  const [_isError, setIsError] = useState(false);
-  const isError = typeof injectIsError === 'boolean' ? injectIsError : _isError;
+  } = props
+  const [_isLoading, setIsLoading] = useState(true)
+  const [_isError, setIsError] = useState(false)
+  const isError = typeof injectIsError === 'boolean' ? injectIsError : _isError
   const isLoading =
-    typeof injectIsLoading === 'boolean' ? injectIsLoading : _isLoading;
+    typeof injectIsLoading === 'boolean' ? injectIsLoading : _isLoading
 
   const __onLoad = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    setIsLoading(false);
-    onLoad?.(e);
-  };
+    setIsLoading(false)
+    onLoad?.(e)
+  }
 
   const __onError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    setIsError(true);
-    onError?.(e);
-  };
+    setIsError(true)
+    onError?.(e)
+  }
 
   const ImageElement = (
     <img
@@ -122,7 +122,7 @@ export const Image = forwardRef(function Image(
       )}
       {...rest}
     />
-  );
+  )
 
   if (isLoading) {
     return (
@@ -130,12 +130,12 @@ export const Image = forwardRef(function Image(
         {fallback}
         <div className="invisible absolute">{ImageElement}</div>
       </>
-    );
+    )
   }
 
   if (isError) {
-    return errorFallback ?? ImageElement;
+    return errorFallback ?? ImageElement
   }
 
-  return ImageElement;
-});
+  return ImageElement
+})

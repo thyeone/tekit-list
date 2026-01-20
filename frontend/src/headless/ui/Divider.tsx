@@ -1,13 +1,13 @@
-import { cn } from '@/libs/cn';
+import { cn } from '@/utils/cn'
 
 type DividerProps<T extends React.ElementType> = {
-  as?: T;
-  className?: string;
-  direction?: 'horizontal' | 'vertical';
-  thickness?: 'thin' | 'thick';
-  flexItem?: boolean;
-  absolute?: boolean;
-};
+  as?: T
+  className?: string
+  direction?: 'horizontal' | 'vertical'
+  thickness?: 'thin' | 'thick'
+  flexItem?: boolean
+  absolute?: boolean
+}
 
 export const Divider = <T extends React.ElementType>({
   as,
@@ -18,7 +18,7 @@ export const Divider = <T extends React.ElementType>({
   absolute,
   ...props
 }: DividerProps<T> & React.ComponentPropsWithoutRef<T>) => {
-  const Element = as ?? 'hr';
+  const Element = as ?? 'hr'
 
   return (
     <Element
@@ -40,5 +40,5 @@ export const Divider = <T extends React.ElementType>({
       )}
       {...props}
     />
-  );
-};
+  )
+}

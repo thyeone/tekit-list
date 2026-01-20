@@ -1,29 +1,29 @@
-import { Flex } from '@/headless/ui/Flex';
-import dayjs from 'dayjs';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useLilius } from 'use-lilius';
+import { Flex } from '@/headless/ui/Flex'
+import dayjs from 'dayjs'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { useLilius } from 'use-lilius'
 
-import 'dayjs/locale/ko';
-import { Box } from '@/headless/ui/Box';
-import { Grid } from '@/headless/ui/Grid';
-import { cn } from '@/libs/cn';
-import { useQueryParams } from '@/hooks/use-query-params-react';
+import { Box } from '@/headless/ui/Box'
+import { Grid } from '@/headless/ui/Grid'
+import { useQueryParams } from '@/hooks/use-query-params-react'
+import { cn } from '@/utils/cn'
+import 'dayjs/locale/ko'
 
-dayjs.locale('ko');
+dayjs.locale('ko')
 
-const HEADER = ['일', '월', '화', '수', '목', '금', '토'];
+const HEADER = ['일', '월', '화', '수', '목', '금', '토']
 
 export function Calendar() {
   const { query, setParams } = useQueryParams({
     year: dayjs().year(),
     month: dayjs().month() + 1,
-  });
+  })
 
   const lilius = useLilius({
     viewing: dayjs(
       `${query.year}-${query.month}-${dayjs().format('MM')}`,
     ).toDate(),
-  });
+  })
 
   return (
     <div>
@@ -32,11 +32,11 @@ export function Calendar() {
           as="button"
           center
           onClick={() => {
-            lilius.viewPreviousMonth();
+            lilius.viewPreviousMonth()
             setParams({
               year: dayjs(lilius.viewing).add(-1, 'month').year(),
               month: dayjs(lilius.viewing).add(-1, 'month').month() + 1,
-            });
+            })
           }}
         >
           <ChevronLeft />
@@ -53,8 +53,8 @@ export function Calendar() {
             setParams({
               year: dayjs(lilius.viewing).add(1, 'month').year(),
               month: dayjs(lilius.viewing).add(1, 'month').month() + 1,
-            });
-            lilius.viewNextMonth();
+            })
+            lilius.viewNextMonth()
           }}
         >
           <ChevronRight />
@@ -62,22 +62,22 @@ export function Calendar() {
       </Flex>
       <Box
         as="table"
-        className="max-h-[calc(100dvh-400px)] w-full max-w-600 mx-auto mt-40"
+        className="mx-auto mt-40 max-h-[calc(100dvh-400px)] w-full max-w-600"
       >
-        <Flex as="thead" className="w-full rounded-t-2xl overflow-hidden h-32">
+        <Flex as="thead" className="h-32 w-full overflow-hidden rounded-t-2xl">
           {HEADER.map((day, index) => {
             return (
               <Flex
                 as="th"
                 key={day}
                 center
-                className={cn('flex-1  bg-gray-100 h-full', {
-                  'border-r border-gray-200': index !== HEADER.length - 1,
+                className={cn('h-full flex-1 bg-gray-100', {
+                  'border-gray-200 border-r': index !== HEADER.length - 1,
                 })}
               >
                 {day}
               </Flex>
-            );
+            )
           })}
         </Flex>
         <Grid as="tbody" className="w-full border border-gray-100">
@@ -85,8 +85,8 @@ export function Calendar() {
             return (
               <Flex
                 as="tr"
-                className={cn('w-full h-80', {
-                  'border-b border-gray-100': index !== week.length - 1,
+                className={cn('h-80 w-full', {
+                  'border-gray-100 border-b': index !== week.length - 1,
                 })}
               >
                 {week.map((day, index) => {
@@ -95,9 +95,9 @@ export function Calendar() {
                       as="td"
                       key={day.toISOString()}
                       className={cn(
-                        'border-gray-200 h-full shrink-0 p-4 flex-1',
+                        'h-full flex-1 shrink-0 border-gray-200 p-4',
                         {
-                          'text-gray-400 bg-gray-50 pointer-events-none':
+                          'pointer-events-none bg-gray-50 text-gray-400':
                             dayjs(day).month() !==
                             dayjs(lilius.viewing).month(),
                           'border-r': index !== week.length - 1,
@@ -106,13 +106,13 @@ export function Calendar() {
                     >
                       {dayjs(day).format('DD')}
                     </Box>
-                  );
+                  )
                 })}
               </Flex>
-            );
+            )
           })}
         </Grid>
       </Box>
     </div>
-  );
+  )
 }

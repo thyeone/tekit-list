@@ -1,21 +1,21 @@
-import { Flex } from './ui/Flex';
-import { List } from './ui/List';
-import { Text } from './ui/Text';
-import { IconButton } from './icon/Icon';
-import { useQueryParams } from '@/hooks/use-query-params-react';
-import { cn } from '@/libs/cn';
+import { useQueryParams } from '@/hooks/use-query-params-react'
+import { cn } from '@/utils/cn'
+import { IconButton } from './icon/Icon'
+import { Flex } from './ui/Flex'
+import { List } from './ui/List'
+import { Text } from './ui/Text'
 
 /**
  * total
  */
 
 type PaginationProps = {
-  total: number;
-  dataCount: number;
-  pageGroupSize?: number;
-  currentPage?: number;
-  onPageChange?: (page: number) => void;
-};
+  total: number
+  dataCount: number
+  pageGroupSize?: number
+  currentPage?: number
+  onPageChange?: (page: number) => void
+}
 
 export function Pagination({
   total,
@@ -25,35 +25,35 @@ export function Pagination({
   onPageChange,
 }: PaginationProps) {
   const { setParams, query } = useQueryParams<{
-    page: number;
+    page: number
   }>({
     page: currentPage ?? 1,
-  });
+  })
 
-  const page = currentPage ?? query.page;
+  const page = currentPage ?? query.page
 
-  const totalPages = Math.ceil(total / dataCount);
+  const totalPages = Math.ceil(total / dataCount)
 
   const pages = (() => {
     const groupStart =
-      Math.floor((page - 1) / pageGroupSize) * pageGroupSize + 1;
-    const groupEnd = Math.min(groupStart + pageGroupSize - 1, totalPages);
+      Math.floor((page - 1) / pageGroupSize) * pageGroupSize + 1
+    const groupEnd = Math.min(groupStart + pageGroupSize - 1, totalPages)
 
     const pages = Array.from(
       { length: groupEnd - groupStart + 1 },
       (_, i) => groupStart + i,
-    );
+    )
 
-    return pages;
-  })();
+    return pages
+  })()
 
   const __onPageChange = (page: number) => {
-    setParams({ page });
-    onPageChange?.(page);
+    setParams({ page })
+    onPageChange?.(page)
 
-    const main = document.getElementById('main');
-    main?.scrollTo({ top: 0 });
-  };
+    const main = document.getElementById('main')
+    main?.scrollTo({ top: 0 })
+  }
 
   return (
     <Flex center gap={8}>
@@ -72,7 +72,7 @@ export function Pagination({
             as="button"
             center
             className={cn('size-40 rounded-[8px] bg-white', {
-              'bg-brand-50 ': query.page === page,
+              'bg-brand-50': query.page === page,
             })}
             onClick={() => __onPageChange(page)}
           >
@@ -97,5 +97,5 @@ export function Pagination({
         onClick={() => __onPageChange(page + 1)}
       />
     </Flex>
-  );
+  )
 }

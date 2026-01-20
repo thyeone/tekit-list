@@ -1,11 +1,11 @@
-import { cn } from '@/libs/cn';
-import { useId } from 'react';
-import { Flex } from '@/headless/ui/Flex';
-import { Icon } from '@/headless/icon/Icon';
+import { Icon } from '@/headless/icon/Icon'
+import { Flex } from '@/headless/ui/Flex'
+import { cn } from '@/utils/cn'
+import { useId } from 'react'
 
 type CheckBoxProps = React.InputHTMLAttributes<HTMLInputElement> & {
-  label: string;
-};
+  label: string
+}
 
 export function CheckBox({
   checked,
@@ -14,7 +14,7 @@ export function CheckBox({
   className,
   ...rest
 }: CheckBoxProps) {
-  const id = useId();
+  const id = useId()
 
   return (
     <Flex align="center" gap={6} className="py-4">
@@ -34,9 +34,9 @@ export function CheckBox({
         )}
       </label>
 
-      <label htmlFor={id} className="cursor-pointer text-[16px] font-medium">
+      <label htmlFor={id} className="cursor-pointer font-medium text-[16px]">
         {label}
       </label>
     </Flex>
-  );
+  )
 }
