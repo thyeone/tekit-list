@@ -72,12 +72,12 @@ input[type='date']::-webkit-date-and-time-value {
   --color-blue: #2787fe;
   --color-green-50: #e1f4eb;
   --color-green-500: #0d884f;
-  --color-brand-50: #e6f8f7;
-  --color-brand-100: #b1eae5;
-  --color-brand-500: #00baac;
-  --color-brand-600: #04a99d;
-  --color-brand-700: #03847a;
-  --color-brand-900: #024e48;
+  --color-brand-50: #f0f6ff;
+  --color-brand-100: #d4e4ff;
+  --color-brand-500: #3182f6;
+  --color-brand-600: #2272eb;
+  --color-brand-700: #1b64da;
+  --color-brand-900: #0f4c99;
   --color-grey-50: #f4f5f8;
   --color-grey-100: #dedee4;
   --color-grey-200: #a9aab4;

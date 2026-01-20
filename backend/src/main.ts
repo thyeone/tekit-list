@@ -9,19 +9,16 @@ async function bootstrap() {
   const config = appConfig();
 
   app.enableCors({
-    allowedHeaders: ["Content-Type", "Authorization"],
-    methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
-    origin: config.cors.origin.indexOf('*')? "*" : config.cors.origin,
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
+    origin: config.cors.origin.indexOf('*') ? '*' : config.cors.origin,
     credentials: true,
     maxAge: 7200,
   });
 
-
-
   if (config.development) {
     try {
       const docs = require('../../swagger.json');
-
 
       SwaggerModule.setup('api-docs', app, docs);
     } catch (error) {

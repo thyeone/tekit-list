@@ -1,12 +1,20 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, Opt, PrimaryKey, Property } from '@mikro-orm/core';
 
 @Entity()
 export class Bucket {
   @PrimaryKey()
   id!: number;
 
-  @Property()
-  createdAt!: Date;
+  @Property({
+    type: 'datetime',
+    onCreate: () => new Date(),
+  })
+  createdAt: Opt<Date> = new Date();
+
+  @Property({
+    default: false,
+  })
+  isCompleted!: boolean;
 
   @Property()
   emojiId!: number;

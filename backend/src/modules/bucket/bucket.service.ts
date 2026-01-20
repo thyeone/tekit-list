@@ -17,6 +17,7 @@ export class BucketService {
       categoryId: bucket.categoryId,
       date: bucket.date,
       description: bucket.description,
+      isCompleted: bucket.isCompleted,
     }));
   }
 
@@ -33,13 +34,14 @@ export class BucketService {
       categoryId: bucket.categoryId,
       date: bucket.date,
       description: bucket.description,
+      isCompleted: bucket.isCompleted,
     };
   }
 
   async create(create: IBucket.Create): Promise<IBucket.RO> {
     const bucket = this.em.create(Bucket, {
       ...create,
-      createdAt: new Date(),
+      isCompleted: false,
     });
     await this.em.flush();
 

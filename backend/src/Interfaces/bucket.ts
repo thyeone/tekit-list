@@ -14,5 +14,6 @@ export namespace IBucket {
     categoryId: number;
     date: Date;
     description: string;
+    isCompleted: boolean;
   }
 }

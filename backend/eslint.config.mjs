@@ -9,7 +9,7 @@ export default tseslint.config(
     ignores: ['eslint.config.mjs'],
   },
   eslint.configs.recommended,
-  // ...tseslint.configs.recommendedTypeChecked,
+  ...tseslint.configs.recommendedTypeChecked,
   eslintPluginPrettierRecommended,
   {
     languageOptions: {
@@ -33,7 +33,7 @@ export default tseslint.config(
       '@typescript-eslint/no-unsafe-call': 'warn',
       '@typescript-eslint/no-unsafe-return': 'warn',
       'prettier/prettier': ['error', { endOfLine: 'auto' }],
-      'no-namespace': 'off',
+      '@typescript-eslint/no-namespace': 'off',
     },
   },
 );
