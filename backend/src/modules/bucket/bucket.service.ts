@@ -58,15 +58,14 @@ export class BucketService {
     await this.em.remove(bucket).flush();
   }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} bucket`;
-  // }
+  async completeBucket(id: number): Promise<void> {
+    const bucket = await this.em.findOne(Bucket, { id });
 
-  // update(id: number, updateBucketDto: UpdateBucketDto) {
-  //   return `This action updates a #${id} bucket`;
-  // }
+    if (!bucket) {
+      throw new NotFoundException('Bucket not found');
+    }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} bucket`;
-  // }
+    bucket.isCompleted = true;
+    await this.em.flush();
+  }
 }

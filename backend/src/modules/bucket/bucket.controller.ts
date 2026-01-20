@@ -59,4 +59,16 @@ export class BucketController {
   async remove(@TypedParam('id') id: number): Promise<void> {
     return await this.bucketService.remove(id);
   }
+
+  /**
+   * 버킷 리스트 완료 처리
+   *
+   * @summary 버킷 리스트 완료 처리
+   * @tag Bucket
+   * @param id 완료할 버킷 ID
+   */
+  @TypedRoute.Patch(':id/complete')
+  async completeBucket(@TypedParam('id') id: number): Promise<void> {
+    return await this.bucketService.completeBucket(id);
+  }
 }
