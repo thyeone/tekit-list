@@ -1,170 +1,85 @@
-# Backend Application
+<p align="center">
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+</p>
 
-NestJS + TypeORM + PostgreSQL 백엔드 애플리케이션
+[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
+[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-## 시작하기
+  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
+    <p align="center">
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
+<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
+<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
+<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
+<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
+<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
+  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
+    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
+  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
+</p>
+  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
+  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-### 1. 환경 변수 설정
+## Description
 
-`.env` 파일을 생성하고 다음 내용을 추가하세요:
+[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-```bash
-# Database Configuration
-DB_TYPE=postgres
-DB_HOST=localhost
-DB_PORT=5432
-DB_USERNAME=postgres
-DB_PASSWORD=postgres
-DB_DATABASE=mydatabase
-
-# Application
-PORT=3000
-NODE_ENV=development
-```
-
-### 2. Docker Compose로 PostgreSQL 실행
-
-```bash
-# PostgreSQL 컨테이너 시작
-docker-compose up -d
-
-# 컨테이너 상태 확인
-docker-compose ps
-
-# 로그 확인
-docker-compose logs -f postgres
-```
-
-### 3. 의존성 설치 및 애플리케이션 실행
+## Project setup
 
 ```bash
-# 의존성 설치
-npm install
-
-# 개발 모드로 실행
-npm run start:dev
-
-# 프로덕션 빌드
-npm run build
-npm run start:prod
+$ npm install
 ```
 
-## Docker Compose 명령어
-
-### 기본 명령어
+## Compile and run the project
 
 ```bash
-# 컨테이너 시작
-docker-compose up -d
+# development
+$ npm run start
 
-# 컨테이너 중지
-docker-compose down
+# watch mode
+$ npm run start:dev
 
-# 컨테이너와 볼륨 모두 삭제 (데이터베이스 초기화)
-docker-compose down -v
-
-# 컨테이너 재시작
-docker-compose restart
-
-# 로그 확인
-docker-compose logs -f
+# production mode
+$ npm run start:prod
 ```
 
-### PostgreSQL 직접 접근
+## Run tests
 
 ```bash
-# PostgreSQL 컨테이너에 접속
-docker-compose exec postgres psql -U postgres -d mydatabase
+# unit tests
+$ npm run test
 
-# 데이터베이스 백업
-docker-compose exec postgres pg_dump -U postgres mydatabase > backup.sql
+# e2e tests
+$ npm run test:e2e
 
-# 데이터베이스 복원
-docker-compose exec -T postgres psql -U postgres mydatabase < backup.sql
+# test coverage
+$ npm run test:cov
 ```
 
-## pgAdmin 사용하기
+## Resources
 
-Docker Compose에 pgAdmin이 포함되어 있습니다.
+Check out a few resources that may come in handy when working with NestJS:
 
-1. 브라우저에서 `http://localhost:5050` 접속
-2. 로그인 정보:
-   - Email: `admin@admin.com`
-   - Password: `admin`
-3. 서버 추가:
-   - Host: `postgres` (Docker 네트워크 내부에서는 서비스 이름 사용)
-   - Port: `5432`
-   - Username: `postgres`
-   - Password: `postgres`
+- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
+- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
+- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
+- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
+- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
+- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
+- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
 
-## 프로젝트 구조
+## Support
 
-```
-src/
-├── config/          # 설정 파일
-│   └── db.config.ts # 데이터베이스 설정
-├── resource/        # 리소스(도메인) 모듈
-│   └── accout/
-│       ├── entities/      # 엔티티
-│       ├── accout.controller.ts
-│       └── accout.module.ts
-├── app.module.ts    # 루트 모듈
-└── main.ts          # 애플리케이션 진입점
-```
+Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-## 개발 스크립트
+## Stay in touch
 
-```bash
-# 개발 모드 (파일 변경 감지)
-npm run start:dev
+- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
+- Website - [https://nestjs.com](https://nestjs.com/)
+- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-# 디버그 모드
-npm run start:debug
+## License
 
-# 테스트
-npm run test
-npm run test:watch
-npm run test:cov
-
-# E2E 테스트
-npm run test:e2e
-
-# 린트
-npm run lint
-
-# 포맷팅
-npm run format
-```
-
-## 환경별 설정
-
-### 개발 환경
-- `synchronize: true` - 엔티티 변경 시 자동으로 DB 스키마 업데이트
-- `logging: true` - SQL 쿼리 로깅 활성화
-
-### 프로덕션 환경
-- `synchronize: false` - 마이그레이션 사용 권장
-- `logging: false` - 성능을 위해 로깅 비활성화
-- 환경 변수는 `.env.production` 사용
-
-## 문제 해결
-
-### 포트 충돌
-PostgreSQL 기본 포트(5432)가 이미 사용 중인 경우:
-
-```yaml
-# docker-compose.yml에서 포트 변경
-ports:
-  - '5433:5432'  # 로컬:컨테이너
-```
-
-그리고 `.env`에서도 변경:
-```bash
-DB_PORT=5433
-```
-
-### 데이터베이스 초기화
-```bash
-docker-compose down -v
-docker-compose up -d
-```
+Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
