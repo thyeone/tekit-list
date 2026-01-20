@@ -1,8 +1,8 @@
-import { cva, type VariantProps } from 'class-variance-authority';
-import { type ElementType, forwardRef } from 'react';
-import { Box, type BoxProps } from '@/headless/ui/Box';
-import { cn } from '@/libs/cn';
-import type { PolymorphicRef } from '@/headless/polymorphics';
+import type { PolymorphicRef } from '@/headless/polymorphics'
+import { Box, type BoxProps } from '@/headless/ui/Box'
+import { cn } from '@/utils/cn'
+import { cva, type VariantProps } from 'class-variance-authority'
+import { type ElementType, forwardRef } from 'react'
 
 export const textVariants = cva('', {
   variants: {
@@ -42,18 +42,18 @@ export const textVariants = cva('', {
       '40-bd': 'font-bold text-[40px]',
     },
   },
-});
+})
 
 export type TextProps<C extends ElementType> = VariantProps<
   typeof textVariants
 > &
-  BoxProps<C>;
+  BoxProps<C>
 
 export const Text = forwardRef(function Text<C extends ElementType = 'p'>(
   { as, className, variant, ...rest }: BoxProps<C> & TextProps<C>,
   ref?: PolymorphicRef<C>,
 ) {
-  const typesRest = rest as BoxProps<C>;
+  const typesRest = rest as BoxProps<C>
   return (
     <Box
       className={cn(textVariants({ variant }), className)}
@@ -61,7 +61,7 @@ export const Text = forwardRef(function Text<C extends ElementType = 'p'>(
       as={as ?? 'p'}
       {...typesRest}
     />
-  );
+  )
 }) as <C extends ElementType = 'p'>(
   props: BoxProps<C> & { ref?: PolymorphicRef<C> } & TextProps<C>,
-) => JSX.Element;
+) => JSX.Element

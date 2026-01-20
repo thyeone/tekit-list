@@ -1,5 +1,5 @@
-import { AsyncBoundary } from '@/components/async-boundary'
-import { Toaster } from '@/components/Toaster'
+import { AsyncBoundary } from '@/headless/async-boundary'
+import { Toaster } from '@/headless/Toaster'
 import { OverlayProvider } from 'overlay-kit'
 import FramerLazyMotionProvider from './framer-lazy-motion-provider'
 import { ReactQueryProvider } from './react-query-provider'

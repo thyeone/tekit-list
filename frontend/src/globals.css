@@ -59,10 +59,10 @@ input[type='date']::-webkit-date-and-time-value {
   --spacing: 1px;
 
   --breakpoint-*: initial;
-  --breakpoint-base: 1200px;
-  --breakpoint-mobile: 450px;
+  --breakpoint-base: 475px;
+  --breakpoint-mobile: 500px;
 
-  --max-width-base: 1200px;
+  --max-width-base: 475px;
   --max-width-mobile: 450px;
 
   --color-white: #ffffff;
