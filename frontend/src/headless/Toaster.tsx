@@ -1,8 +1,8 @@
 'use client'
 
+import { cn } from '@/utils/cn'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useSyncExternalStore } from 'react'
-import { cn } from '../libs/cn'
 import { AnimatePortal } from './overlay/AnimatePortal'
 
 type Toast = {

@@ -7,18 +7,23 @@ function customFetch(
   return fetch(input, init)
 }
 
-let instance: Api<unknown> | null = null
+type ApiInstance<T = unknown> = Omit<
+  Api<T>,
+  'abortRequest' | 'baseUrl' | 'request' | 'setSecurityData'
+>
+
+let instance: ApiInstance | null = null
 
 /**
  * 토큰 로직 추가 필요
  */
-export function api(): Api<unknown> {
+export function api<T>(): ApiInstance<T> {
   if (instance) {
     return instance
   }
 
-  const __instance = new Api({
-    baseUrl: process.env.EXPO_PUBLIC_API_HOST,
+  const __instance = new Api<T>({
+    baseUrl: import.meta.env.VITE_API_HOST,
     baseApiParams: {
       format: 'json',
       secure: true,

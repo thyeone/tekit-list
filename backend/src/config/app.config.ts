@@ -1,5 +1,9 @@
+
 export const appConfig = () => ({
   port: process.env.PORT || 3088,
+  cors: {
+    origin: process.env.CORS_ORIGIN || '*',
+  },
   db: {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,

@@ -6,11 +6,7 @@ export function Screen({
   className,
 }: PropsWithStrictChildren<{ className?: string }>) {
   return (
-    <Col
-      as="main"
-      align="center"
-      className={cn('min-h-dvh w-full px-16', className)}
-    >
+    <Col as="main" className={cn('min-h-dvh w-full px-16', className)}>
       {children}
     </Col>
   )

@@ -8,13 +8,28 @@ async function bootstrap() {
 
   const config = appConfig();
 
+  app.enableCors({
+    allowedHeaders: ["Content-Type", "Authorization"],
+    methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
+    origin: config.cors.origin.indexOf('*')? "*" : config.cors.origin,
+    credentials: true,
+    maxAge: 7200,
+  });
+
+
+
   if (config.development) {
     try {
-      const docs = require('./swagger.json');
+      const docs = require('../../swagger.json');
+
+
       SwaggerModule.setup('api-docs', app, docs);
     } catch (error) {
-      console.warn('⚠️ swagger.json 파일이 없습니다.');
+      console.error('⚠️ Swagger 로드 실패:', error);
+      console.error('현재 디렉토리:', __dirname);
     }
+  } else {
+    console.log('✅ Swagger UI: http://localhost:3088/api-docs');
   }
 
   await app.listen(process.env.PORT ?? 3088);
