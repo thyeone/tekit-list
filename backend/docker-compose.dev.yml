@@ -1,0 +1,13 @@
+services:
+  db:
+    image: postgis/postgis:16-3.4-alpine
+    ports:
+      - 3577:5432
+    environment:
+      TZ: Asia/Seoul
+      LANG: ko_KR.utf8
+      POSTGRES_PASSWORD: a123456
+      POSTGRES_DB: household
+      POSTGRES_INITDB_ARGS: "--locale-provider=icu --icu-locale=ko-KR"
+    volumes:
+      - ./_generated_/db:/var/lib/postgresql/data
