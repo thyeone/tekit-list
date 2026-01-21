@@ -65,7 +65,7 @@ export class BucketService {
       throw new NotFoundException('Bucket not found');
     }
 
-    bucket.isCompleted = true;
+    bucket.isCompleted = !bucket.isCompleted;
     await this.em.flush();
   }
 }
