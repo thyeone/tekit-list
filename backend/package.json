@@ -25,6 +25,7 @@
     "migration:down": "mikro-orm migration:down",
     "schema:update": "mikro-orm schema:update --run",
     "schema:drop": "mikro-orm schema:drop --run",
+    "seed:fresh": "cross-env SEED=1 mikro-orm schema:fresh --run=true --seed DummySeeder",
     "sdk:swagger": "npx @nestia/sdk swagger"
   },
   "dependencies": {
@@ -49,6 +50,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.18.0",
+    "@mikro-orm/seeder": "^6.6.4",
     "@nestia/core": "^10.0.1",
     "@nestia/sdk": "^10.0.1",
     "@nestjs/cli": "^11.0.0",

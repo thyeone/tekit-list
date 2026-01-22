@@ -1,8 +1,10 @@
+import { emojiQueries } from '@/apis/emoji/queries'
 import { IconButton } from '@/headless/icon/Icon'
 import { Box } from '@/headless/ui/Box'
-import { Col, Row } from '@/headless/ui/Flex'
+import { Col, Flex, Row } from '@/headless/ui/Flex'
 import { Text } from '@/headless/ui/Text'
 import { cn } from '@/utils/cn'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { Backdrop } from './Backdrop'
 
 // 자주 사용되는 이모지 목록 (이모지 ID 0-63)
@@ -73,12 +75,10 @@ const EMOJI_LIST = [
   { id: 63, emoji: '💯', label: '100점' },
 ]
 
-interface EmojiPickerProps {
-  isOpen: boolean
-  onClose: () => void
+type EmojiPickerProps = {
   onSelect: (emojiId: number) => void
   selectedId?: number
-}
+} & OverlayProps
 
 export function EmojiPicker({
   isOpen,
@@ -86,6 +86,8 @@ export function EmojiPicker({
   onSelect,
   selectedId,
 }: EmojiPickerProps) {
+  const { data } = useSuspenseQuery(emojiQueries.list())
+
   const handleSelect = (emojiId: number) => {
     onSelect(emojiId)
     onClose()
@@ -108,20 +110,23 @@ export function EmojiPicker({
         </Row>
         <Box className="max-h-400 overflow-y-auto">
           <div className="grid grid-cols-5 gap-8">
-            {EMOJI_LIST.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => handleSelect(item.id)}
+            {data.map((emoji) => (
+              <Flex
+                as="button"
+                key={emoji.id}
+                center
+                onClick={() => handleSelect(emoji.id)}
                 className={cn(
-                  'flex h-56 w-56 items-center justify-center rounded-xl text-32-rg transition-all hover:scale-110 hover:bg-brand-50',
-                  selectedId === item.id &&
-                    'bg-brand-100 ring-2 ring-brand-500',
+                  'size-56 overflow-hidden rounded-xl text-32-rg transition-all hover:scale-105 hover:bg-brand-50',
+                  {
+                    'bg-brand-100 ring-2 ring-brand-500':
+                      selectedId === emoji.id,
+                  },
                 )}
-                title={item.label}
+                title={emoji.name}
               >
-                {item.emoji}
-              </button>
+                {emoji.unicode}
+              </Flex>
             ))}
           </div>
         </Box>
