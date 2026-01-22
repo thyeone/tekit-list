@@ -63,12 +63,12 @@ export class BucketController {
   /**
    * 버킷 리스트 완료 처리
    *
-   * @summary 버킷 리스트 완료 처리
+   * @summary 버킷 리스트 완료 상태 업데이트
    * @tag Bucket
-   * @param id 완료할 버킷 ID
+   * @param id 완료 상태를 업데이트할 버킷 ID
    */
   @TypedRoute.Patch(':id/complete')
-  async completeBucket(@TypedParam('id') id: number): Promise<void> {
-    return await this.bucketService.completeBucket(id);
+  async updateCompleteBucket(@TypedParam('id') id: number): Promise<void> {
+    return await this.bucketService.updateCompleteBucket(id);
   }
 }

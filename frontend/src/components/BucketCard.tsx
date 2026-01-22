@@ -26,7 +26,7 @@ export function BucketCard({ bucket }: { bucket: IBucketRO }) {
       <Flex
         as="button"
         center
-        className="size-24 rounded-full border border-gray-200"
+        className="size-24 rounded-full border border-gray-200 transition-all hover:bg-gray-100"
         onClick={(e) => {
           e.preventDefault()
           complete({ id: bucket.id })
@@ -37,9 +37,9 @@ export function BucketCard({ bucket }: { bucket: IBucketRO }) {
         )}
       </Flex>
       <Row gap={12} align="center">
-        {String.fromCodePoint(0x1f600 + (bucket.emojiId % 64))}
+        <span className="text-2xl">{bucket.emojiUnicode}</span>
         <p
-          className={cn('text-base text-grey-900', {
+          className={cn('font-medium text-base text-grey-900', {
             'text-gray-400 line-through': bucket.isCompleted,
           })}
         >
@@ -51,19 +51,19 @@ export function BucketCard({ bucket }: { bucket: IBucketRO }) {
           center
           className={cn('w-fit rounded-4xl px-8 py-4 font-medium text-xs', {
             'bg-blue-100 text-blue-500':
-              dayjs(bucket.date).diff(dayjs(), 'day') > 7,
+              dayjs(bucket.dueDate).diff(dayjs(), 'day') > 7,
             'bg-red-100 text-red-500':
-              dayjs(bucket.date).diff(dayjs(), 'day') < 7 &&
-              dayjs(bucket.date).diff(dayjs(), 'day') > 0,
+              dayjs(bucket.dueDate).diff(dayjs(), 'day') < 7 &&
+              dayjs(bucket.dueDate).diff(dayjs(), 'day') > 0,
             'bg-green-100 text-green-500':
-              dayjs(bucket.date).diff(dayjs(), 'day') === 0,
+              dayjs(bucket.dueDate).diff(dayjs(), 'day') === 0,
             'bg-gray-100 text-gray-500':
-              dayjs(bucket.date).diff(dayjs(), 'day') < 0,
+              dayjs(bucket.dueDate).diff(dayjs(), 'day') < 0,
           })}
         >
-          {dayjs(bucket.date).diff(dayjs(), 'day') > 0
-            ? `D-${dayjs(bucket.date).diff(dayjs(), 'day')}`
-            : dayjs(bucket.date).diff(dayjs(), 'day') === 0
+          {dayjs(bucket.dueDate).diff(dayjs(), 'day') > 0
+            ? `D-${dayjs(bucket.dueDate).diff(dayjs(), 'day')}`
+            : dayjs(bucket.dueDate).diff(dayjs(), 'day') === 0
               ? 'D-Day'
               : '지난 날'}
         </Flex>

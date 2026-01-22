@@ -1,14 +1,14 @@
-import { forwardRef } from 'react';
-import type { PolymorphicComponentProps } from '../polymorphics';
-import { Flex, type FlexProps } from '../ui/Flex';
-import * as Icons from './svgs';
+import { forwardRef } from 'react'
+import type { PolymorphicComponentProps } from '../polymorphics'
+import { Flex, type FlexProps } from '../ui/Flex'
+import * as Icons from './svgs'
 
-export type IconName = keyof typeof Icons;
+export type IconName = keyof typeof Icons
 
 export type IconProps = React.SVGProps<SVGSVGElement> & {
-  name: IconName;
-  size?: number;
-};
+  name: IconName
+  size?: number
+}
 
 function IconComponent(props: IconProps, ref?: React.Ref<SVGSVGElement>) {
   const {
@@ -17,9 +17,9 @@ function IconComponent(props: IconProps, ref?: React.Ref<SVGSVGElement>) {
     height = props.height ?? props.size ?? 24,
     fill = 'none',
     ...rest
-  } = props;
+  } = props
 
-  const IconElement = Icons[name];
+  const IconElement = Icons[name]
 
   return (
     <IconElement
@@ -32,19 +32,19 @@ function IconComponent(props: IconProps, ref?: React.Ref<SVGSVGElement>) {
       }}
       {...rest}
     />
-  );
+  )
 }
 
-export const Icon = forwardRef(IconComponent);
+export const Icon = forwardRef(IconComponent)
 
 export type IconButtonProps<C extends React.ElementType = 'button'> =
   IconProps &
     FlexProps<C> & {
-      className?: string;
-    };
+      className?: string
+    }
 
 export const IconButton = forwardRef(
-  // @ts-ignore
+  // @ts-expect-error
   <C extends React.ElementType = 'button'>(
     {
       as,
@@ -59,14 +59,14 @@ export const IconButton = forwardRef(
     }: PolymorphicComponentProps<C, IconButtonProps<C>>,
     ref: React.Ref<SVGSVGElement>,
   ) => {
-    const Component = component ?? Flex;
+    const Component = component ?? Flex
 
     const iconProps: IconProps = {
       name,
       width: width || size,
       height: height || size,
       fill,
-    };
+    }
 
     const componentProps =
       Component === Flex
@@ -79,16 +79,16 @@ export const IconButton = forwardRef(
         : {
             style: { flexShrink: 0, ...style },
             ...rest,
-          };
+          }
 
     return (
       <Component {...componentProps}>
         <Icon {...iconProps} ref={ref} />
       </Component>
-    );
+    )
   },
 ) as <C extends React.ElementType = 'button'>(
   props: PolymorphicComponentProps<C, IconButtonProps<C>> & {
-    ref?: React.Ref<SVGSVGElement>;
+    ref?: React.Ref<SVGSVGElement>
   },
-) => JSX.Element;
+) => React.ReactNode

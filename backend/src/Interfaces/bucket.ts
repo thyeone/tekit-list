@@ -1,18 +1,22 @@
 export namespace IBucket {
   export interface Create {
     title: string;
-    emojiId: number;
+    emojiUnicode: string;
     categoryId: number;
-    date: Date;
+    /**
+     * 목표날짜 (yyyy-mm-dd)
+     * @format date
+     */
+    dueDate: string;
     description: string;
   }
 
   export interface RO {
     id: number;
     title: string;
-    emojiId: number;
+    emojiUnicode: string;
     categoryId: number;
-    date: Date;
+    dueDate: Date;
     description: string;
     isCompleted: boolean;
   }

@@ -10,42 +10,26 @@ export class BucketService {
   async findAll(orderBy: { createdAt: 'ASC' | 'DESC' }): Promise<IBucket.RO[]> {
     const buckets = await this.em.find(Bucket, {}, { orderBy: { createdAt: orderBy.createdAt } });
 
-    return buckets.map((bucket) => ({
-      id: bucket.id,
-      title: bucket.title,
-      emojiId: bucket.emojiId,
-      categoryId: bucket.categoryId,
-      date: bucket.date,
-      description: bucket.description,
-      isCompleted: bucket.isCompleted,
-    }));
+    return buckets.map((bucket) => Bucket.buildRO(bucket));
   }
 
   async findOne(id: number): Promise<IBucket.RO> {
     const bucket = await this.em.findOne(Bucket, { id });
+
     if (!bucket) {
       throw new NotFoundException('Bucket not found');
     }
 
-    return {
-      id: bucket.id,
-      title: bucket.title,
-      emojiId: bucket.emojiId,
-      categoryId: bucket.categoryId,
-      date: bucket.date,
-      description: bucket.description,
-      isCompleted: bucket.isCompleted,
-    };
+    return Bucket.buildRO(bucket);
   }
 
   async create(create: IBucket.Create): Promise<IBucket.RO> {
     const bucket = this.em.create(Bucket, {
       ...create,
-      isCompleted: false,
     });
     await this.em.flush();
 
-    return bucket;
+    return Bucket.buildRO(bucket);
   }
 
   async remove(id: number): Promise<void> {
@@ -58,7 +42,7 @@ export class BucketService {
     await this.em.remove(bucket).flush();
   }
 
-  async completeBucket(id: number): Promise<void> {
+  async updateCompleteBucket(id: number): Promise<void> {
     const bucket = await this.em.findOne(Bucket, { id });
 
     if (!bucket) {

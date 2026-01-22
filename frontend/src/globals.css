@@ -64,6 +64,7 @@ input[type='date']::-webkit-date-and-time-value {
 
   --max-width-base: 475px;
   --max-width-mobile: 450px;
+  --max-width-modal: 358px;
 
   --color-white: #ffffff;
   --color-black: #000000;
@@ -88,7 +89,9 @@ input[type='date']::-webkit-date-and-time-value {
   --color-grey-700: #303241;
   --color-grey-800: #252732;
   --color-grey-900: #1c1e26;
+  --color-primary: #2787fe;
 
   --z-index-modal: 1000;
-  --z-index-header: 999;
+  --z-index-dim: 999;
+  --z-index-header: 998;
 }

@@ -1,3 +1,4 @@
+import { IBucket } from '@/Interfaces/bucket';
 import { Entity, Opt, PrimaryKey, Property } from '@mikro-orm/core';
 
 @Entity()
@@ -6,7 +7,7 @@ export class Bucket {
   id!: number;
 
   @Property({
-    type: 'datetime',
+    type: 'date',
     onCreate: () => new Date(),
   })
   createdAt: Opt<Date> = new Date();
@@ -14,10 +15,10 @@ export class Bucket {
   @Property({
     default: false,
   })
-  isCompleted!: boolean;
+  isCompleted: Opt<boolean> = false;
 
   @Property()
-  emojiId!: number;
+  emojiUnicode!: string;
 
   @Property()
   title!: string;
@@ -25,9 +26,21 @@ export class Bucket {
   @Property()
   categoryId!: number;
 
-  @Property({ type: 'date' })
-  date!: Date;
+  @Property({ type: 'datetime' })
+  dueDate!: Date;
 
   @Property()
   description!: string;
+
+  static buildRO(bucket: Bucket): IBucket.RO {
+    return {
+      id: bucket.id,
+      title: bucket.title,
+      emojiUnicode: bucket.emojiUnicode || '',
+      categoryId: bucket.categoryId,
+      dueDate: bucket.dueDate,
+      description: bucket.description,
+      isCompleted: bucket.isCompleted,
+    };
+  }
 }
