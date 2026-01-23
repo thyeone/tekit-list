@@ -1,118 +1,128 @@
-import { Flex } from '@/headless/ui/Flex'
-import dayjs from 'dayjs'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { useLilius } from 'use-lilius'
-
 import { Box } from '@/headless/ui/Box'
-import { Grid } from '@/headless/ui/Grid'
-import { useQueryParams } from '@/hooks/use-query-params-react'
+import { Flex } from '@/headless/ui/Flex'
+import { Text } from '@/headless/ui/Text'
 import { cn } from '@/utils/cn'
+import dayjs from 'dayjs'
 import 'dayjs/locale/ko'
+import { useLilius } from 'use-lilius'
+import { IconButton } from './icon/Icon'
+import { Grid } from './ui/Grid'
 
 dayjs.locale('ko')
 
 const HEADER = ['일', '월', '화', '수', '목', '금', '토']
 
-export function Calendar() {
-  const { query, setParams } = useQueryParams({
-    year: dayjs().year(),
-    month: dayjs().month() + 1,
+type CalendarProps = {
+  date: Date
+  onSelect: (date: Date) => void
+}
+
+export function Calendar({ date, onSelect }: CalendarProps) {
+  const lilius = useLilius({
+    viewing: date,
+    selected: [date],
   })
 
-  const lilius = useLilius({
-    viewing: dayjs(
-      `${query.year}-${query.month}-${dayjs().format('MM')}`,
-    ).toDate(),
-  })
+  const handleDateClick = (date: Date) => {
+    if (
+      dayjs(date).isBefore(dayjs(), 'day') ||
+      dayjs(date).month() !== dayjs(lilius.viewing).month()
+    ) {
+      return
+    }
+    lilius.toggle(date)
+    onSelect(date)
+  }
+
+  const isToday = (_date: Date) => dayjs(_date).isSame(dayjs(), 'day')
+
+  const isSelected = (_date: Date) => {
+    if (!date) {
+      return false
+    }
+
+    return dayjs(_date).isSame(dayjs(date), 'day')
+  }
+
+  const isPast = (_date: Date) => dayjs(_date).isBefore(dayjs(), 'day')
+
+  const isOtherMonth = (date: Date) =>
+    dayjs(date).month() !== dayjs(lilius.viewing).month()
 
   return (
-    <div>
-      <Flex center gap={12}>
-        <Flex
-          as="button"
-          center
-          onClick={() => {
-            lilius.viewPreviousMonth()
-            setParams({
-              year: dayjs(lilius.viewing).add(-1, 'month').year(),
-              month: dayjs(lilius.viewing).add(-1, 'month').month() + 1,
-            })
-          }}
-        >
-          <ChevronLeft />
-        </Flex>
-        <span className="font-semibold text-xl">
-          {dayjs(lilius.viewing).format('YYYY년 MM월')}
-        </span>
-        <Flex
-          as="button"
-          center
-          className="disabled:opacity-30"
-          disabled={dayjs(lilius.viewing).add(1, 'month').isAfter(dayjs())}
-          onClick={() => {
-            setParams({
-              year: dayjs(lilius.viewing).add(1, 'month').year(),
-              month: dayjs(lilius.viewing).add(1, 'month').month() + 1,
-            })
-            lilius.viewNextMonth()
-          }}
-        >
-          <ChevronRight />
-        </Flex>
+    <Box className="w-full">
+      <Flex center justify="between" gap={4} className="mb-16">
+        <IconButton
+          name="ChevronLeft"
+          onClick={lilius.viewPreviousMonth}
+          size={24}
+          className="text-grey-400"
+        />
+        <Text variant="18-bd" className="text-grey-900">
+          {dayjs(lilius.viewing).format('YYYY년 M월')}
+        </Text>
+        <IconButton
+          name="ChevronLeft"
+          onClick={lilius.viewNextMonth}
+          size={24}
+          className="rotate-180 text-grey-400"
+        />
       </Flex>
-      <Box
-        as="table"
-        className="mx-auto mt-40 max-h-[calc(100dvh-400px)] w-full max-w-600"
-      >
-        <Flex as="thead" className="h-32 w-full overflow-hidden rounded-t-2xl">
-          {HEADER.map((day, index) => {
+
+      <div className="mb-8 grid grid-cols-7 gap-4">
+        {HEADER.map((day, index) => (
+          <Flex key={day} center className="h-40">
+            <Text
+              variant="14-md"
+              className={cn('text-grey-500', {
+                'text-red': index === 0, // 일요일
+                'text-brand-500': index === 6, // 토요일
+              })}
+            >
+              {day}
+            </Text>
+          </Flex>
+        ))}
+      </div>
+
+      <Grid columns="7" gap={4}>
+        {lilius.calendar[0].map((week) =>
+          week.map((date) => {
+            const isPastDate = isPast(date)
+            const isOtherMonthDate = isOtherMonth(date)
+            const isTodayDate = isToday(date)
+            const isSelectedDate = isSelected(date)
+
             return (
               <Flex
-                as="th"
-                key={day}
+                key={date.toISOString()}
+                as="button"
                 center
-                className={cn('h-full flex-1 bg-gray-100', {
-                  'border-gray-200 border-r': index !== HEADER.length - 1,
-                })}
+                flex={1}
+                onClick={() => handleDateClick(date)}
+                disabled={isPastDate || isOtherMonthDate}
+                className={cn(
+                  'relative aspect-square rounded-full font-medium text-[16px] transition-all',
+                  {
+                    'text-grey-900 hover:bg-brand-50 hover:text-brand-700':
+                      !isPastDate && !isOtherMonthDate && !isSelectedDate,
+
+                    'bg-brand-500 text-white hover:bg-brand-600':
+                      isSelectedDate,
+
+                    'pointer-events-none text-grey-200': isOtherMonthDate,
+
+                    'pointer-events-none text-grey-300 line-through':
+                      isPastDate && !isOtherMonthDate,
+                  },
+                )}
               >
-                {day}
+                {dayjs(date).format('D')}
               </Flex>
             )
-          })}
-        </Flex>
-        <Grid as="tbody" className="w-full border border-gray-100">
-          {lilius.calendar[0].map((week, index) => {
-            return (
-              <Flex
-                as="tr"
-                className={cn('h-80 w-full', {
-                  'border-gray-100 border-b': index !== week.length - 1,
-                })}
-              >
-                {week.map((day, index) => {
-                  return (
-                    <Box
-                      as="td"
-                      key={day.toISOString()}
-                      className={cn(
-                        'h-full flex-1 shrink-0 border-gray-200 p-4',
-                        {
-                          'pointer-events-none bg-gray-50 text-gray-400':
-                            dayjs(day).month() !==
-                            dayjs(lilius.viewing).month(),
-                          'border-r': index !== week.length - 1,
-                        },
-                      )}
-                    >
-                      {dayjs(day).format('DD')}
-                    </Box>
-                  )
-                })}
-              </Flex>
-            )
-          })}
-        </Grid>
-      </Box>
-    </div>
+          }),
+        )}
+      </Grid>
+    </Box>
   )
 }

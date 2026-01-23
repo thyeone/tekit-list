@@ -23,21 +23,19 @@ export class Bucket {
   @Property()
   title!: string;
 
-  @Property()
-  categoryId!: number;
-
   @Property({ type: 'datetime' })
   dueDate!: Date;
 
-  @Property()
-  description!: string;
+  @Property({
+    nullable: true,
+  })
+  description?: string;
 
   static buildRO(bucket: Bucket): IBucket.RO {
     return {
       id: bucket.id,
       title: bucket.title,
       emojiUnicode: bucket.emojiUnicode || '',
-      categoryId: bucket.categoryId,
       dueDate: bucket.dueDate,
       description: bucket.description,
       isCompleted: bucket.isCompleted,

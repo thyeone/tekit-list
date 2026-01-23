@@ -1,8 +1,8 @@
 import { bucketQueries } from '@/apis/bucket/queries'
 import { BucketCard } from '@/components/BucketCard'
-import { Button } from '@/components/Button'
-import { Header } from '@/components/Header'
-import { Screen } from '@/components/Screen'
+import { Button } from '@/components/common/Button'
+import { Header } from '@/components/common/Header'
+import { Screen } from '@/components/common/Screen'
 import { Box } from '@/headless/ui/Box'
 import { Col, Row } from '@/headless/ui/Flex'
 import { List } from '@/headless/ui/List'
@@ -38,7 +38,7 @@ export default function Index() {
       }
     >
       <p className="mt-24 text-2xl">
-        <span className="font-bold">ST</span>가 같이 채운 버킷리스트가
+        버킷리스트가
         <br />
         <span className="font-bold text-brand-500">
           {data.filter((row) => !row.isCompleted).length}개{' '}

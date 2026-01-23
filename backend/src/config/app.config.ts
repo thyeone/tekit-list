@@ -1,4 +1,3 @@
-
 export const appConfig = () => ({
   port: process.env.PORT || 3088,
   cors: {

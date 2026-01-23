@@ -20,7 +20,7 @@ export function Backdrop({
         center
         component={motion.div}
         {...fadeInOut}
-        className="fixed inset-0 z-modal mx-auto max-w-modal"
+        className="fixed inset-0 z-modal mx-auto max-w-modal px-16"
       >
         <Dim onClick={onClose} />
         {children}
