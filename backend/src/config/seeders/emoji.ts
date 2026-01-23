@@ -1,6 +1,6 @@
 import type { EntityManager } from '@mikro-orm/core';
 import { Seeder } from '@mikro-orm/seeder';
-import { Emoji } from '../../modules/bucket/emoji/emoji.entity';
+import { Emoji } from '../../modules/emoji/emoji.entity';
 
 export class EmojiSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {

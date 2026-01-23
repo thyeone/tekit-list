@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { dbConfig } from './config/db.config';
 import { BucketModule } from './modules/bucket/bucket.module';
-import { EmojiModule } from './modules/bucket/emoji/emoji.module';
+import { EmojiModule } from './modules/emoji/emoji.module';
 
 @Module({
   imports: [
