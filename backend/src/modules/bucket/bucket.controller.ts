@@ -1,4 +1,5 @@
 import type { IBucket } from '@/Interfaces/bucket';
+import { QueryOrder } from '@mikro-orm/core';
 import { TypedBody, TypedParam, TypedQuery, TypedRoute } from '@nestia/core';
 import { Controller } from '@nestjs/common';
 import { BucketService } from './bucket.service';
@@ -16,10 +17,14 @@ export class BucketController {
    * @returns 버킷 리스트 배열
    */
   @TypedRoute.Get()
-  async findAll(@TypedQuery() query: { orderBy?: 'ASC' | 'DESC' }): Promise<IBucket.RO[]> {
-    return await this.bucketService.findAll({
-      createdAt: query.orderBy || 'ASC',
-    });
+  async findAll(
+    @TypedQuery()
+    query: { orderBy?: QueryOrder; status?: 'ALL' | 'COMPLETED' | 'INCOMPLETED' } = {
+      orderBy: QueryOrder.DESC,
+      status: 'ALL',
+    },
+  ): Promise<IBucket.RO[]> {
+    return await this.bucketService.findAll({ createdAt: query.orderBy || QueryOrder.DESC }, query.status);
   }
 
   /**

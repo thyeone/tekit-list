@@ -8,7 +8,7 @@ export class Bucket {
   id!: number;
 
   @Property({
-    type: 'date',
+    type: 'datetime',
     onCreate: () => new Date(),
   })
   createdAt: Opt<Date> = new Date();

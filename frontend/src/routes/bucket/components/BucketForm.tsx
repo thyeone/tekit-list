@@ -1,6 +1,5 @@
 import { api } from '@/api'
 import { bucketMutations } from '@/apis/bucket/mutaitons'
-import { emojiQueries } from '@/apis/emoji/queries'
 import { Button } from '@/components/common/Button'
 import { Dialog } from '@/components/common/Dialog'
 import { Header } from '@/components/common/Header'
@@ -13,7 +12,6 @@ import { EmojiPicker } from '@/components/EmojiPicker'
 import { Col, Flex } from '@/headless/ui/Flex'
 import { Spacing } from '@/headless/ui/Spacing'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQuery } from '@tanstack/react-query'
 import { useRouter } from '@tanstack/react-router'
 import type { Emoji, IBucketRO } from 'api'
 import dayjs from 'dayjs'
@@ -39,11 +37,11 @@ const schema = z.object({
 
 type BucketFormProps = {
   bucket?: IBucketRO
+  emoji: Emoji[]
 }
 
-export function BucketForm({ bucket }: BucketFormProps) {
+export function BucketForm({ bucket, emoji }: BucketFormProps) {
   const router = useRouter()
-  const { data: emoji } = useQuery(emojiQueries.list())
 
   const { mutate: createMutate } = bucketMutations.create()
   const { mutate: updateMutate } = bucketMutations.update()
@@ -95,7 +93,7 @@ export function BucketForm({ bucket }: BucketFormProps) {
 
   return (
     <Screen
-      className="bg-white"
+      // className="bg-white"
       header={
         <Header>
           <Header.Back />

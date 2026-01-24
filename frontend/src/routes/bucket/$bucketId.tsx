@@ -1,4 +1,5 @@
 import { bucketQueries } from '@/apis/bucket/queries'
+import { emojiQueries } from '@/apis/emoji/queries'
 import { createFileRoute } from '@tanstack/react-router'
 import { BucketForm } from './components/BucketForm'
 
@@ -9,12 +10,13 @@ export const Route = createFileRoute('/bucket/$bucketId')({
     const bucket = await context.queryClient.ensureQueryData(
       bucketQueries.detail(Number(bucketId)),
     )
-    return { bucket }
+    const emoji = await context.queryClient.ensureQueryData(emojiQueries.list())
+    return { bucket, emoji }
   },
 })
 
 function BucketDetail() {
-  const { bucket } = Route.useLoaderData()
+  const { bucket, emoji } = Route.useLoaderData()
 
-  return <BucketForm bucket={bucket} />
+  return <BucketForm bucket={bucket} emoji={emoji} />
 }

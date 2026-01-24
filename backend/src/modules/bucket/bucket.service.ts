@@ -1,5 +1,5 @@
 import type { IBucket } from '@/Interfaces/bucket';
-import { EntityManager } from '@mikro-orm/core';
+import { EntityManager, FilterQuery, QueryOrder } from '@mikro-orm/core';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Emoji } from '../emoji/emoji.entity';
 import { Bucket } from './bucket.entity';
@@ -8,8 +8,22 @@ import { Bucket } from './bucket.entity';
 export class BucketService {
   constructor(private readonly em: EntityManager) {}
 
-  async findAll(orderBy: { createdAt: 'ASC' | 'DESC' }): Promise<IBucket.RO[]> {
-    const buckets = await this.em.find(Bucket, {}, { orderBy: { createdAt: orderBy.createdAt }, populate: ['emoji'] });
+  async findAll(
+    orderBy: { createdAt: QueryOrder },
+    status?: 'ALL' | 'COMPLETED' | 'INCOMPLETED',
+  ): Promise<IBucket.RO[]> {
+    const where: FilterQuery<Bucket> = {};
+
+    if (status === 'COMPLETED') {
+      where.isCompleted = true;
+    }
+    if (status === 'INCOMPLETED') {
+      where.isCompleted = false;
+    }
+    const buckets = await this.em.find(Bucket, where, {
+      orderBy: { createdAt: orderBy.createdAt },
+      populate: ['emoji'],
+    });
 
     return buckets.map((bucket) => Bucket.buildRO(bucket));
   }

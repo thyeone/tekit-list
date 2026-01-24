@@ -15,7 +15,9 @@ export const bucketMutations = {
       mutationFn: (params: CompletePartialUpdateParams) =>
         api().bucket.completePartialUpdate(params),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: bucketKeys.list() })
+        queryClient.invalidateQueries({
+          queryKey: bucketKeys.list.all(),
+        })
       },
     })
   },

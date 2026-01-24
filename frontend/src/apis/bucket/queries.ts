@@ -6,8 +6,9 @@ import { bucketKeys } from './keys'
 export const bucketQueries = {
   list: (params: BucketListParams) =>
     queryOptions({
-      queryKey: bucketKeys.list(),
+      queryKey: bucketKeys.list.__list(params),
       queryFn: () => api().bucket.bucketList(params),
+      initialData: [],
     }),
 
   detail: (id: number) =>

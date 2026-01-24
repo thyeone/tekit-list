@@ -3,12 +3,15 @@ import { BucketCard } from '@/components/BucketCard'
 import { Button } from '@/components/common/Button'
 import { Header } from '@/components/common/Header'
 import { Screen } from '@/components/common/Screen'
+import { Select } from '@/components/common/Select'
 import { Box } from '@/headless/ui/Box'
-import { Col, Row } from '@/headless/ui/Flex'
+import { Col, Flex, Row } from '@/headless/ui/Flex'
 import { List } from '@/headless/ui/List'
 import { Spacing } from '@/headless/ui/Spacing'
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { useQueryParams } from '@/hooks/use-query-params-react'
+import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
+import type { OrderByEnum, StatusEnum } from 'api'
 import { useMemo } from 'react'
 
 export const Route = createFileRoute('/')({
@@ -16,7 +19,16 @@ export const Route = createFileRoute('/')({
 })
 
 export default function Index() {
-  const { data } = useSuspenseQuery(bucketQueries.list({ orderBy: 'DESC' }))
+  const { query, setParams } = useQueryParams<{
+    orderBy: OrderByEnum
+    status: StatusEnum
+  }>({
+    orderBy: 'DESC',
+    status: 'ALL',
+  })
+  const { data } = useQuery(
+    bucketQueries.list({ orderBy: query.orderBy, status: query.status }),
+  )
 
   const progress = useMemo(() => {
     return Math.round(
@@ -45,8 +57,45 @@ export default function Index() {
         </span>
         남았어요!
       </p>
+
       <Spacing size={48} />
-      <Col className="mb-16 rounded-2xl bg-white p-20">
+      <Flex gap={8} className="mb-16">
+        <Select
+          options={[
+            {
+              label: '전체',
+              value: 'ALL',
+            },
+            {
+              label: '진행중',
+              value: 'INCOMPLETED',
+            },
+            {
+              label: '완료됨',
+              value: 'COMPLETED',
+            },
+          ]}
+          value={query.status}
+          onChange={(status) => setParams({ status: status as StatusEnum })}
+        />
+
+        <Select
+          options={[
+            {
+              label: '최신순',
+              value: 'DESC',
+            },
+            {
+              label: '오래된순',
+              value: 'ASC',
+            },
+          ]}
+          value={query.orderBy}
+          onChange={(orderBy) => setParams({ orderBy })}
+        />
+      </Flex>
+
+      <Col className="mb-16 rounded-2xl bg-white p-20 shadow-sm">
         <Row align="center" justify="between">
           <p className="font-medium text-base text-grey-900">진행률</p>
           <p className="font-medium text-18-bd text-grey-900">
@@ -65,6 +114,7 @@ export default function Index() {
           />
         </Box>
       </Col>
+
       <List
         data={data}
         gap={8}
