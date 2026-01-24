@@ -7,6 +7,7 @@ type ScreenProps = {
   innerClassName?: string
   header?: React.ReactNode
   bottomFixedButton?: React.ReactNode
+  onSubmit?: VoidFunction
 }
 
 export function Screen({
@@ -15,9 +16,14 @@ export function Screen({
   innerClassName,
   bottomFixedButton,
   header,
+  onSubmit,
 }: PropsWithStrictChildren<ScreenProps>) {
   return (
-    <Col as="main" className={cn('min-h-dvh w-full bg-gray-50', className)}>
+    <Col
+      as={onSubmit ? 'form' : 'main'}
+      onSubmit={onSubmit}
+      className={cn('min-h-dvh w-full bg-gray-50', className)}
+    >
       {header}
       <Col className={cn('px-16', innerClassName)}>{children}</Col>
       {bottomFixedButton && (

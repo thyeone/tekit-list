@@ -1,3 +1,5 @@
+import { Emoji } from '@/modules/emoji/emoji.entity';
+
 export namespace IBucket {
   export interface Create {
     title: string;
@@ -13,7 +15,7 @@ export namespace IBucket {
   export interface RO {
     id: number;
     title: string;
-    emojiUnicode: string;
+    emojiUnicode: Emoji;
     dueDate: Date;
     description?: string;
     isCompleted: boolean;

@@ -13,12 +13,14 @@ type TextFieldProps<C extends React.ElementType = 'input' | 'textarea'> =
     as?: C
     error?: string
     label?: string
+    required?: boolean
   }
 export function TextField<C extends React.ElementType = 'input' | 'textarea'>({
   as = 'input',
   error,
   value,
   label,
+  required,
   className,
   ...rest
 }: TextFieldProps<C>) {
@@ -26,10 +28,10 @@ export function TextField<C extends React.ElementType = 'input' | 'textarea'>({
 
   return (
     <Col className={cn('w-full')}>
-      {label && <Label>{label}</Label>}
+      {label && <Label required={required}>{label}</Label>}
       <Component
         className={cn(
-          'h-52 w-full rounded-xl border border-grey-200 bg-white px-16 py-14 font-normal text-[16px] text-grey-900 transition-all placeholder:text-grey-300 hover:border-grey-300 focus:border-brand-500 focus:outline-none disabled:cursor-not-allowed disabled:bg-grey-50 disabled:text-grey-400',
+          'h-44 w-full rounded-xl border border-grey-200 bg-white px-16 py-14 font-normal text-[16px] text-grey-900 transition-all placeholder:text-grey-300 hover:border-grey-300 focus:border-brand-500 focus:outline-none disabled:cursor-not-allowed disabled:bg-grey-50 disabled:text-grey-400',
           {
             'h-[117px] resize-none': as === 'textarea',
             'border-red ring-2 ring-red/10': error,

@@ -9,7 +9,7 @@ export class EmojiSeeder extends Seeder {
       { name: '여행', unicode: '✈️' },
       { name: '운동', unicode: '🏃' },
       { name: '취미', unicode: '🎨' },
-      { name: '학습', unicode: '📚' },
+      { name: '공부', unicode: '📚' },
       { name: '도전', unicode: '🔥' },
     ];
 

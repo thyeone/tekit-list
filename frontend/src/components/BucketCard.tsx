@@ -11,9 +11,9 @@ export function BucketCard({ bucket }: { bucket: IBucketRO }) {
 
   return (
     <Row
-      component={Link}
-      to="/bucket"
       key={bucket.id}
+      component={Link}
+      to={`/bucket/${bucket.id}`}
       gap={12}
       className={cn(
         'w-full rounded-2xl bg-white p-20 shadow-sm transition-all hover:scale-[1.01] hover:shadow-md',
@@ -37,7 +37,7 @@ export function BucketCard({ bucket }: { bucket: IBucketRO }) {
         )}
       </Flex>
       <Row gap={12} align="center">
-        <span className="text-2xl">{bucket.emojiUnicode}</span>
+        <span className="text-2xl">{bucket.emojiUnicode.unicode}</span>
         <p
           className={cn('font-medium text-base text-grey-900', {
             'text-gray-400 line-through': bucket.isCompleted,

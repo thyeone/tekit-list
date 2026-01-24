@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BucketCreateRouteImport } from './routes/bucket/create'
+import { Route as BucketBucketIdRouteImport } from './routes/bucket/$bucketId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,30 +23,39 @@ const BucketCreateRoute = BucketCreateRouteImport.update({
   path: '/bucket/create',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BucketBucketIdRoute = BucketBucketIdRouteImport.update({
+  id: '/bucket/$bucketId',
+  path: '/bucket/$bucketId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/bucket/$bucketId': typeof BucketBucketIdRoute
   '/bucket/create': typeof BucketCreateRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/bucket/$bucketId': typeof BucketBucketIdRoute
   '/bucket/create': typeof BucketCreateRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/bucket/$bucketId': typeof BucketBucketIdRoute
   '/bucket/create': typeof BucketCreateRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/bucket/create'
+  fullPaths: '/' | '/bucket/$bucketId' | '/bucket/create'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/bucket/create'
-  id: '__root__' | '/' | '/bucket/create'
+  to: '/' | '/bucket/$bucketId' | '/bucket/create'
+  id: '__root__' | '/' | '/bucket/$bucketId' | '/bucket/create'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BucketBucketIdRoute: typeof BucketBucketIdRoute
   BucketCreateRoute: typeof BucketCreateRoute
 }
 
@@ -65,11 +75,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BucketCreateRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/bucket/$bucketId': {
+      id: '/bucket/$bucketId'
+      path: '/bucket/$bucketId'
+      fullPath: '/bucket/$bucketId'
+      preLoaderRoute: typeof BucketBucketIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BucketBucketIdRoute: BucketBucketIdRoute,
   BucketCreateRoute: BucketCreateRoute,
 }
 export const routeTree = rootRouteImport

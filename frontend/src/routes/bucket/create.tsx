@@ -1,3 +1,4 @@
+import { bucketMutations } from '@/apis/bucket/mutaitons'
 import { emojiQueries } from '@/apis/emoji/queries'
 import { Button } from '@/components/common/Button'
 import { Header } from '@/components/common/Header'
@@ -6,8 +7,7 @@ import { Screen } from '@/components/common/Screen'
 import { FormTextField } from '@/components/common/TextField'
 import { DatePicker } from '@/components/DatePicker'
 import { EmojiPicker } from '@/components/EmojiPicker'
-import { Icon } from '@/headless/icon/Icon'
-import { Col, Flex, Row } from '@/headless/ui/Flex'
+import { Col, Flex } from '@/headless/ui/Flex'
 import { Spacing } from '@/headless/ui/Spacing'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSuspenseQuery } from '@tanstack/react-query'
@@ -18,9 +18,17 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 const schema = z.object({
-  emojiId: z.number(),
-  title: z.string().min(1),
-  dueDate: z.date(),
+  emoji: z.object({
+    id: z.number(),
+    name: z.string(),
+    unicode: z.string(),
+  }),
+  title: z.string().min(1, {
+    message: '제목을 입력해주세요',
+  }),
+  dueDate: z.date({
+    message: '마감일을 선택해주세요',
+  }),
   description: z.string().optional(),
 })
 
@@ -32,15 +40,31 @@ function BucketCreate() {
   const router = useRouter()
   const { data: emoji } = useSuspenseQuery(emojiQueries.list())
 
+  const { mutate } = bucketMutations.create()
+
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
-      emojiId: emoji[0].id,
+      emoji: emoji[0],
       title: '',
     },
   })
 
-  console.log(form.watch('dueDate'))
+  const onSubmit = form.handleSubmit((data) => {
+    mutate(
+      {
+        title: data.title,
+        emojiUnicode: data.emoji.unicode,
+        dueDate: dayjs(data.dueDate).format('YYYY-MM-DD'),
+        description: data.description,
+      },
+      {
+        onSuccess: () => {
+          router.history.back()
+        },
+      },
+    )
+  })
 
   return (
     <Screen
@@ -52,6 +76,7 @@ function BucketCreate() {
           <Header.Right />
         </Header>
       }
+      onSubmit={onSubmit}
     >
       <p className="my-24 text-2xl">
         소소해도 괜찮아요. <br />
@@ -69,7 +94,11 @@ function BucketCreate() {
                   close()
                 }}
                 onSelect={(emojiId) => {
-                  form.setValue('emojiId', emojiId)
+                  const __emoji = emoji.find((e) => e.id === emojiId)
+
+                  if (__emoji) {
+                    form.setValue('emoji', __emoji)
+                  }
                   close()
                 }}
               />
@@ -77,43 +106,29 @@ function BucketCreate() {
           }}
           className="size-100 rounded-full bg-gray-50 transition-all hover:bg-gray-100"
         >
-          <p className="text-[48px]">
-            {emoji.find((e) => e.id === Number(form.watch('emojiId')))?.unicode}
-          </p>
+          <p className="text-[48px]">{form.watch('emoji').unicode}</p>
         </Flex>
       </Col>
       <Col gap={8}>
-        <FormTextField control={form.control} name="title" label="버킷리스트" />
+        <FormTextField
+          required
+          control={form.control}
+          name="title"
+          label="제목"
+        />
         <Col>
-          <Label>마감일</Label>
-          <Row
-            as="button"
-            align="center"
-            gap={6}
-            className="rounded-xl border border-grey-200 p-16"
-            onClick={() => {
-              overlay.open(({ isOpen, close }) => (
-                <DatePicker
-                  date={form.watch('dueDate')}
-                  isOpen={isOpen}
-                  onClose={() => {
-                    close()
-                  }}
-                  onSelect={(date) => {
-                    form.setValue('dueDate', date)
-                    close()
-                  }}
-                />
-              ))
+          <Label required>마감일</Label>
+          <DatePicker
+            date={form.watch('dueDate')}
+            onSelect={(date) => {
+              form.setValue('dueDate', date)
             }}
-          >
-            <Icon name="Calendar" size={16} className="text-grey-500" />
-            <p className="font-medium text-base text-grey-900">
-              {form.watch('dueDate')
-                ? dayjs(form.watch('dueDate')).format('YYYY년 MM월 D일')
-                : '날짜를 선택해주세요'}
+          />
+          {form.formState.errors.dueDate && (
+            <p className="mt-4 font-medium text-[14px] text-red-500">
+              {form.formState.errors.dueDate.message}
             </p>
-          </Row>
+          )}
         </Col>
         <FormTextField
           as="textarea"
@@ -131,7 +146,7 @@ function BucketCreate() {
           >
             취소
           </Button>
-          <Button>등록하기</Button>
+          <Button type="submit">등록하기</Button>
         </Flex>
       </Col>
     </Screen>

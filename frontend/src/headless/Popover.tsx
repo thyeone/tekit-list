@@ -1,26 +1,27 @@
-'use client';
+'use client'
 
-import { Slot } from '@radix-ui/react-slot';
-import { m } from 'framer-motion';
-import React, {
-  RefObject,
+import { Slot } from '@radix-ui/react-slot'
+import { m } from 'framer-motion'
+import type React from 'react'
+import {
+  type RefObject,
   createContext,
   useContext,
   useEffect,
   useMemo,
   useRef,
   useState,
-} from 'react';
-import { AnimatePortal } from './overlay/AnimatePortal';
+} from 'react'
+import { AnimatePortal } from './overlay/AnimatePortal'
 
 type DropdownPosition = {
-  top: number;
-  left: number;
-  width: number;
-  triggerHeight: number;
-  popoverHeight: number;
-  popoverWidth: number;
-};
+  top: number
+  left: number
+  width: number
+  triggerHeight: number
+  popoverHeight: number
+  popoverWidth: number
+}
 
 type Position =
   | 'top'
@@ -30,31 +31,31 @@ type Position =
   | 'top-left'
   | 'top-right'
   | 'bottom-left'
-  | 'bottom-right';
+  | 'bottom-right'
 
-type OffsetValue = number | { mainAxis?: number; crossAxis?: number };
+type OffsetValue = number | { mainAxis?: number; crossAxis?: number }
 
 type PopoverContextValue = {
-  isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  trigger: 'click' | 'hover';
-  contentPosition: DropdownPosition;
-  setContentPosition: React.Dispatch<React.SetStateAction<DropdownPosition>>;
-  contentRef: RefObject<HTMLDivElement>;
-  triggerRef: RefObject<HTMLDivElement>;
-  position: Position;
-  offset: OffsetValue;
-};
+  isOpen: boolean
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+  trigger: 'click' | 'hover'
+  contentPosition: DropdownPosition
+  setContentPosition: React.Dispatch<React.SetStateAction<DropdownPosition>>
+  contentRef: RefObject<HTMLDivElement | null>
+  triggerRef: RefObject<HTMLDivElement | null>
+  position: Position
+  offset: OffsetValue
+}
 
-const PopoverContext = createContext<PopoverContextValue | null>(null);
+const PopoverContext = createContext<PopoverContextValue | null>(null)
 
 function usePopoverContext() {
-  const context = useContext(PopoverContext);
+  const context = useContext(PopoverContext)
   if (!context) {
-    throw new Error();
+    throw new Error()
   }
 
-  return context;
+  return context
 }
 
 function Root({
@@ -62,14 +63,15 @@ function Root({
   trigger = 'click',
   position = 'bottom',
   offset = 0,
-}: PropsWithStrictChildren<{
-  trigger?: 'click' | 'hover';
-  position?: Position;
-  offset?: OffsetValue;
-}>) {
-  const [isOpen, setIsOpen] = useState(false);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLDivElement>(null);
+}: {
+  trigger?: 'click' | 'hover'
+  position?: Position
+  offset?: OffsetValue
+  children: (isOpen: boolean) => React.ReactNode
+}) {
+  const [isOpen, setIsOpen] = useState(false)
+  const contentRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLDivElement>(null)
   const [contentPosition, setContentPosition] = useState<DropdownPosition>({
     top: 0,
     left: 0,
@@ -77,7 +79,7 @@ function Root({
     triggerHeight: 0,
     popoverHeight: 0,
     popoverWidth: 0,
-  });
+  })
 
   useEffect(() => {
     if (trigger === 'click' && isOpen) {
@@ -88,29 +90,29 @@ function Root({
           triggerRef.current &&
           !triggerRef.current.contains(event.target as Node)
         ) {
-          setIsOpen(false);
+          setIsOpen(false)
         }
-      };
+      }
 
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('mousedown', handleClickOutside)
 
       return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
+        document.removeEventListener('mousedown', handleClickOutside)
+      }
     }
-  }, [isOpen, trigger]);
+  }, [isOpen, trigger])
 
   useEffect(() => {
     if (trigger === 'hover') {
       const onScroll = () => {
-        setIsOpen(false);
-      };
+        setIsOpen(false)
+      }
 
-      document.addEventListener('scroll', onScroll);
+      document.addEventListener('scroll', onScroll)
 
-      return () => document.removeEventListener('scroll', onScroll);
+      return () => document.removeEventListener('scroll', onScroll)
     }
-  }, [trigger, setIsOpen]);
+  }, [trigger, setIsOpen])
 
   const memoizedValue = useMemo(
     () => ({
@@ -125,13 +127,13 @@ function Root({
       offset,
     }),
     [isOpen, trigger, contentPosition, position, offset],
-  );
+  )
 
   return (
     <PopoverContext.Provider value={memoizedValue}>
-      {children}
+      {children(isOpen)}
     </PopoverContext.Provider>
-  );
+  )
 }
 
 function Trigger({ children }: PropsWithStrictChildren) {
@@ -142,31 +144,31 @@ function Trigger({ children }: PropsWithStrictChildren) {
     contentRef,
     trigger,
     triggerRef,
-  } = usePopoverContext();
+  } = usePopoverContext()
 
   const eventHandlers =
     trigger === 'hover'
       ? {
           onMouseEnter: (e: React.MouseEvent) => {
-            e.stopPropagation();
-            setIsOpen(true);
+            e.stopPropagation()
+            setIsOpen(true)
           },
           onMouseLeave: (e: React.MouseEvent) => {
-            e.stopPropagation();
-            setIsOpen(false);
+            e.stopPropagation()
+            setIsOpen(false)
           },
         }
       : {
           onClick: (e: React.MouseEvent) => {
-            e.stopPropagation();
-            setIsOpen((prev) => !prev);
+            e.stopPropagation()
+            setIsOpen((prev) => !prev)
           },
-        };
+        }
 
   useEffect(() => {
     if (isOpen && triggerRef.current && contentRef.current) {
-      const rect = triggerRef.current?.getBoundingClientRect();
-      const dropdownRect = contentRef.current.getBoundingClientRect();
+      const rect = triggerRef.current?.getBoundingClientRect()
+      const dropdownRect = contentRef.current.getBoundingClientRect()
       setContentPosition({
         top: rect.bottom,
         left: rect.left,
@@ -174,90 +176,98 @@ function Trigger({ children }: PropsWithStrictChildren) {
         triggerHeight: rect.height,
         popoverHeight: dropdownRect.height,
         popoverWidth: dropdownRect.width,
-      });
+      })
     }
-  }, [isOpen]);
+  }, [isOpen])
 
   return (
     <Slot ref={triggerRef} {...eventHandlers}>
       {children}
     </Slot>
-  );
+  )
 }
 
-function Content({ children }: PropsWithStrictChildren) {
+function Content({
+  children,
+  permanent,
+}: PropsWithStrictChildren<{
+  permanent?: boolean
+}>) {
   const { contentPosition, isOpen, contentRef, setIsOpen, position, offset } =
-    usePopoverContext();
+    usePopoverContext()
 
   const getOffsetValues = (): { mainAxis: number; crossAxis: number } => {
     if (typeof offset === 'number') {
-      return { mainAxis: offset, crossAxis: 0 };
+      return { mainAxis: offset, crossAxis: 0 }
     }
     return {
       mainAxis: offset.mainAxis ?? 0,
       crossAxis: offset.crossAxis ?? 0,
-    };
-  };
+    }
+  }
 
   const getPositionStyles = () => {
     const { top, left, width, triggerHeight, popoverHeight, popoverWidth } =
-      contentPosition;
-    const { mainAxis, crossAxis } = getOffsetValues();
+      contentPosition
+    const { mainAxis, crossAxis } = getOffsetValues()
 
     switch (position) {
       case 'top':
         return {
           top: top - popoverHeight - mainAxis - triggerHeight,
           left: left + (width - popoverWidth) / 2 + crossAxis,
-        };
+        }
       case 'top-left':
         return {
           top: top - popoverHeight - mainAxis - triggerHeight,
           left: left + crossAxis,
-        };
+        }
       case 'top-right':
         return {
           top: top - popoverHeight - mainAxis - triggerHeight,
           left: left + width - popoverWidth + crossAxis,
-        };
+        }
       case 'bottom':
         return {
           top: top + mainAxis,
           left: left + (width - popoverWidth) / 2 + crossAxis,
-        };
+        }
       case 'bottom-left':
         return {
           top: top + mainAxis,
           left: left + crossAxis,
-        };
+        }
       case 'bottom-right':
         return {
           top: top + mainAxis,
           left: left - popoverWidth - crossAxis + width,
-        };
+        }
       case 'left':
         return {
           top: top + (triggerHeight - popoverHeight) / 2 + crossAxis,
           left: left - popoverWidth - mainAxis,
-        };
+        }
       case 'right':
         return {
           top: top + (triggerHeight - popoverHeight) / 2 + crossAxis,
           left: left + width + mainAxis,
-        };
+        }
       default:
         return {
           top: top + triggerHeight + mainAxis,
           left: left + crossAxis,
-        };
+        }
     }
-  };
+  }
 
   return (
     <AnimatePortal isOpen={isOpen}>
       <m.div
         ref={contentRef}
-        onClick={() => setIsOpen(false)}
+        onClick={() => {
+          if (permanent) return
+          setIsOpen(false)
+        }}
         style={{
           position: 'fixed',
           ...getPositionStyles(),
@@ -267,11 +277,11 @@ function Content({ children }: PropsWithStrictChildren) {
         {children}
       </m.div>
     </AnimatePortal>
-  );
+  )
 }
 
 export const Popover = {
   Root,
   Trigger,
   Content,
-};
+}

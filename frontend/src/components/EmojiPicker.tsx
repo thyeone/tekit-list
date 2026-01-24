@@ -44,23 +44,26 @@ export function EmojiPicker({
         <Box className="max-h-400 overflow-y-auto">
           <Grid columns="3" gap={8}>
             {data.map((emoji) => (
-              <Flex
+              <Col
                 as="button"
                 key={emoji.id}
-                center
-                flex={1}
-                onClick={() => handleSelect(emoji.id)}
-                className={cn(
-                  'h-56 overflow-hidden rounded-xl text-3xl transition-all hover:scale-105 hover:bg-brand-50',
-                  {
+                align="center"
+                gap={4}
+                className="overflow-hidden rounded-lg p-8 transition-all hover:bg-brand-50"
+              >
+                <Flex
+                  center
+                  flex={1}
+                  onClick={() => handleSelect(emoji.id)}
+                  className={cn('text-3xl', {
                     'bg-brand-100 ring-2 ring-brand-500':
                       selectedId === emoji.id,
-                  },
-                )}
-                title={emoji.name}
-              >
-                {emoji.unicode}
-              </Flex>
+                  })}
+                >
+                  {emoji.unicode}
+                </Flex>
+                <p className="text-grey-900 text-sm">{emoji.name}</p>
+              </Col>
             ))}
           </Grid>
         </Box>

@@ -67,6 +67,7 @@ export default function Index() {
       </Col>
       <List
         data={data}
+        gap={8}
         renderItem={(bucket) => <BucketCard bucket={bucket} />}
       />
     </Screen>

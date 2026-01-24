@@ -1,9 +1,9 @@
 import { Divider } from '@/headless/ui/Divider'
-import { Flex } from '@/headless/ui/Flex'
+import { Flex, type FlexProps } from '@/headless/ui/Flex'
 import { cn } from '@/utils/cn'
 import { Fragment } from 'react'
 
-type ListProps<T> = Omit<React.ComponentProps<typeof Flex>, 'children'> & {
+type ListProps<T> = Omit<FlexProps, 'children'> & {
   data: T[]
   renderItem: (data: T, index: number) => React.ReactNode
   renderEmpty?: () => React.ReactNode
