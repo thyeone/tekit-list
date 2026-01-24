@@ -33,7 +33,7 @@ export const bucketMutations = {
       mutationFn: ({ id, ...params }: BucketUpdateParams & IBucketCreate) =>
         api().bucket.bucketUpdate({ id }, params),
       onSuccess: ({ id }) => {
-        queryClient.invalidateQueries({ queryKey: bucketKeys.detail(id) })
+        queryClient.refetchQueries({ queryKey: bucketKeys.detail(id) })
       },
     })
   },

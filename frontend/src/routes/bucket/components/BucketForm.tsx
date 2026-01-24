@@ -59,8 +59,6 @@ export function BucketForm({ bucket }: BucketFormProps) {
     },
   })
 
-  console.log(form.watch())
-
   const onSubmit = form.handleSubmit((data) => {
     if (bucket) {
       updateMutate(
