@@ -93,7 +93,7 @@ export function BucketForm({ bucket, emoji }: BucketFormProps) {
 
   return (
     <Screen
-      // className="bg-white"
+      className="bg-white"
       header={
         <Header>
           <Header.Back />

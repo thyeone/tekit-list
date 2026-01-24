@@ -33,7 +33,8 @@
       "recommended": true,
       "correctness": {
         "noUnusedVariables": "warn",
-        "noEmptyPattern": "off"
+        "noEmptyPattern": "off",
+        "useExhaustiveDependencies": "off"
       },
       "a11y": "off",
       "style": {

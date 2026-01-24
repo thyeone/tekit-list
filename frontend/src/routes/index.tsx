@@ -4,6 +4,8 @@ import { Button } from '@/components/common/Button'
 import { Header } from '@/components/common/Header'
 import { Screen } from '@/components/common/Screen'
 import { Select } from '@/components/common/Select'
+import { Icon } from '@/headless/icon/Icon'
+import { toast } from '@/headless/Toaster'
 import { Box } from '@/headless/ui/Box'
 import { Col, Flex, Row } from '@/headless/ui/Flex'
 import { List } from '@/headless/ui/List'
@@ -12,7 +14,7 @@ import { useQueryParams } from '@/hooks/use-query-params-react'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import type { OrderByEnum, StatusEnum } from 'api'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 
 export const Route = createFileRoute('/')({
   component: Index,
@@ -29,6 +31,10 @@ export default function Index() {
   const { data } = useQuery(
     bucketQueries.list({ orderBy: query.orderBy, status: query.status }),
   )
+
+  const onRefresh = useCallback(() => {
+    setParams({ orderBy: 'DESC', status: 'ALL' })
+  }, [])
 
   const progress = useMemo(() => {
     return Math.round(
@@ -59,7 +65,7 @@ export default function Index() {
       </p>
 
       <Spacing size={48} />
-      <Flex gap={8} className="mb-16">
+      <Flex align="center" gap={8} className="mb-16">
         <Select
           options={[
             {
@@ -93,6 +99,17 @@ export default function Index() {
           value={query.orderBy}
           onChange={(orderBy) => setParams({ orderBy })}
         />
+        <Flex
+          as="button"
+          center
+          onClick={() => {
+            onRefresh()
+            toast.success('필터를 초기화했습니다.')
+          }}
+          className="size-40 rounded-full border border-grey-200 bg-white text-gray-600"
+        >
+          <Icon name="Refresh" size={16} />
+        </Flex>
       </Flex>
 
       <Col className="mb-16 rounded-2xl bg-white p-20 shadow-sm">

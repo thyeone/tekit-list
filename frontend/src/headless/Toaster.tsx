@@ -3,6 +3,7 @@
 import { cn } from '@/utils/cn'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useSyncExternalStore } from 'react'
+import { Icon } from './icon/Icon'
 import { AnimatePortal } from './overlay/AnimatePortal'
 
 type Toast = {
@@ -47,9 +48,9 @@ const dispatch = (action: Action) => {
 }
 
 export const toast = {
-  show: (text: string) => {
+  show: (text: string, type: 'SUCCESS' | 'FAIL' | 'DEFAULT' = 'DEFAULT') => {
     const newToast: Toast = {
-      type: 'DEFAULT',
+      type: type ?? 'DEFAULT',
       id: Date.now(),
       text,
     }
@@ -61,24 +62,10 @@ export const toast = {
     }, 2500)
   },
   success: (text: string) => {
-    dispatch({
-      type: 'ADD',
-      toast: {
-        type: 'SUCCESS',
-        id: Date.now(),
-        text,
-      },
-    })
+    toast.show(text, 'SUCCESS')
   },
   fail: (text: string) => {
-    dispatch({
-      type: 'ADD',
-      toast: {
-        type: 'FAIL',
-        id: Date.now(),
-        text,
-      },
-    })
+    toast.show(text, 'FAIL')
   },
   remove: (id: number) => {
     dispatch({ type: 'REMOVE', id })
@@ -94,9 +81,9 @@ export const toast = {
 const _TOAST_LIMIT_POLICY = 5
 
 const variants = {
-  initial: { opacity: 0, y: 50 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -20 },
+  initial: { opacity: 0, y: 50, scale: 0.95 },
+  animate: { opacity: 1, y: 0, scale: 1 },
+  exit: { opacity: 0, y: -20, scale: 0.95 },
 }
 
 export function Toaster() {
@@ -114,10 +101,10 @@ export function Toaster() {
         initial="initial"
         animate="animate"
         exit="exit"
-        className="pointer-events-none fixed inset-x-0 bottom-68 z-modal mx-auto flex w-full max-w-[358px] flex-col justify-center gap-2 px-5"
+        className="pointer-events-none fixed inset-x-0 bottom-80 z-modal mx-auto flex w-full max-w-modal flex-col justify-center gap-8 px-20"
       >
         <AnimatePresence>
-          {toasts.map(({ id, text }) => (
+          {toasts.map(({ id, text, type }) => (
             <motion.div
               key={id}
               layout
@@ -125,11 +112,21 @@ export function Toaster() {
               initial="initial"
               animate="animate"
               exit="exit"
+              transition={{
+                type: 'spring',
+                stiffness: 500,
+                damping: 30,
+              }}
               className={cn(
-                'pointer-events-none inline-flex h-52 w-full select-none items-center gap-12 rounded-xl bg-gray-700 px-18 font-medium text-body-3 text-white backdrop-blur',
+                'pointer-events-none inline-flex w-full select-none items-center gap-12 rounded-2xl bg-brand-500 px-20 py-12 font-medium text-[15px] text-white shadow-lg backdrop-blur-md',
               )}
             >
-              {text}
+              {type === 'SUCCESS' && (
+                <div className="flex size-20 shrink-0 items-center justify-center rounded-full bg-white/20">
+                  <Icon name="Check" size={14} className="text-white" />
+                </div>
+              )}
+              <span className="flex-1">{text}</span>
             </motion.div>
           ))}
         </AnimatePresence>
