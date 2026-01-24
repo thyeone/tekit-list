@@ -1,4 +1,3 @@
-import { AsyncBoundary } from '@/headless/async-boundary'
 import { Toaster } from '@/headless/Toaster'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { OverlayProvider } from 'overlay-kit'
@@ -9,13 +8,11 @@ export function Providers({ children }: PropsWithStrictChildren) {
   return (
     <FramerLazyMotionProvider>
       <ReactQueryProvider>
-        <AsyncBoundary>
-          <OverlayProvider>
-            {children}
-            <Toaster />
-            <ReactQueryDevtools buttonPosition="bottom-left" />
-          </OverlayProvider>
-        </AsyncBoundary>
+        <OverlayProvider>
+          {children}
+          <Toaster />
+          <ReactQueryDevtools buttonPosition="bottom-left" />
+        </OverlayProvider>
       </ReactQueryProvider>
     </FramerLazyMotionProvider>
   )

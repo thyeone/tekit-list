@@ -37,7 +37,7 @@ export function BucketCard({ bucket }: { bucket: IBucketRO }) {
         )}
       </Flex>
       <Row gap={12} align="center">
-        <span className="text-2xl">{bucket.emojiUnicode.unicode}</span>
+        <span className="text-2xl">{bucket.emoji.unicode}</span>
         <p
           className={cn('font-medium text-base text-grey-900', {
             'text-gray-400 line-through': bucket.isCompleted,
@@ -49,7 +49,7 @@ export function BucketCard({ bucket }: { bucket: IBucketRO }) {
       <Row align="center" gap={8} className="ml-auto">
         <Flex
           center
-          className={cn('w-fit rounded-4xl px-8 py-4 font-medium text-xs', {
+          className={cn('w-fit rounded-4xl px-8 py-4 font-semibold text-xs', {
             'bg-blue-100 text-blue-500':
               dayjs(bucket.dueDate).diff(dayjs(), 'day') > 7,
             'bg-red-100 text-red-500':

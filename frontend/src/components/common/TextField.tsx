@@ -24,12 +24,13 @@ export function TextField<C extends React.ElementType = 'input' | 'textarea'>({
   className,
   ...rest
 }: TextFieldProps<C>) {
-  const Component = as
+  const Component = as === 'input' ? 'input' : 'textarea'
 
   return (
     <Col className={cn('w-full')}>
       {label && <Label required={required}>{label}</Label>}
       <Component
+        value={value}
         className={cn(
           'h-44 w-full rounded-xl border border-grey-200 bg-white px-16 py-14 font-normal text-[16px] text-grey-900 transition-all placeholder:text-grey-300 hover:border-grey-300 focus:border-brand-500 focus:outline-none disabled:cursor-not-allowed disabled:bg-grey-50 disabled:text-grey-400',
           {

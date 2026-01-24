@@ -19,7 +19,7 @@ export class Bucket {
   isCompleted: Opt<boolean> = false;
 
   @ManyToOne()
-  emojiUnicode!: Emoji;
+  emoji!: Emoji;
 
   @Property()
   title!: string;
@@ -33,14 +33,13 @@ export class Bucket {
   description?: string;
 
   static buildRO(bucket: Bucket): IBucket.RO {
-    console.log(bucket.emojiUnicode.name, 'test123');
     return {
       id: bucket.id,
       title: bucket.title,
-      emojiUnicode: bucket.emojiUnicode,
+      emoji: bucket.emoji,
       dueDate: bucket.dueDate,
       description: bucket.description,
-      isCompleted: bucket.isCompleted,
+      isCompleted: bucket.isCompleted || false,
     };
   }
 }

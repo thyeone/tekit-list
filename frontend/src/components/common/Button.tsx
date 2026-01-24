@@ -6,7 +6,7 @@ type ButtonProps<C extends React.ElementType = 'button'> = Omit<
   'as'
 > & {
   size?: 'sm' | 'lg'
-  variant?: 'primary' | 'secondary' | 'tertiary'
+  variant?: 'primary' | 'secondary' | 'warning'
 }
 
 export function Button<C extends React.ElementType = 'button'>({
@@ -26,6 +26,7 @@ export function Button<C extends React.ElementType = 'button'>({
         {
           'mx-auto w-fit': size === 'sm',
           'bg-grey-100 text-grey-900': variant === 'secondary',
+          'bg-red-500 text-white': variant === 'warning',
         },
         className,
       )}

@@ -38,7 +38,7 @@ export default function Index() {
       }
     >
       <p className="mt-24 text-2xl">
-        버킷리스트가
+        <span className="font-bold">태현</span>님이 채운 버킷리스트가
         <br />
         <span className="font-bold text-brand-500">
           {data.filter((row) => !row.isCompleted).length}개{' '}

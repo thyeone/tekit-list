@@ -56,7 +56,7 @@ export function Calendar({ date, onSelect }: CalendarProps) {
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
-      className="w-full rounded-2xl bg-grey-700 px-16 py-24"
+      className="w-full rounded-2xl bg-black/80 px-16 py-24 backdrop-blur-sm"
     >
       <Flex center justify="between" gap={4} className="mb-16">
         <IconButton

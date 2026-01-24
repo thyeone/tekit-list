@@ -61,6 +61,20 @@ export class BucketController {
   }
 
   /**
+   * 버킷 리스트 수정
+   *
+   * @summary 버킷 리스트 수정
+   * @tag Bucket
+   * @param id 수정할 버킷 ID
+   * @param update 수정할 버킷 정보
+   * @returns 수정된 버킷 리스트
+   */
+  @TypedRoute.Put(':id')
+  async update(@TypedParam('id') id: number, @TypedBody() update: IBucket.Create): Promise<IBucket.RO> {
+    return await this.bucketService.update(id, update);
+  }
+
+  /**
    * 버킷 리스트 완료 처리
    *
    * @summary 버킷 리스트 완료 상태 업데이트

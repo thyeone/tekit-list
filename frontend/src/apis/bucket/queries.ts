@@ -9,4 +9,11 @@ export const bucketQueries = {
       queryKey: bucketKeys.list(),
       queryFn: () => api().bucket.bucketList(params),
     }),
+
+  detail: (id: number) =>
+    queryOptions({
+      queryKey: bucketKeys.detail(id),
+      queryFn: () => api().bucket.bucketDetail({ id }),
+      enabled: !!id,
+    }),
 }

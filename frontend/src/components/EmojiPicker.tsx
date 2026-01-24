@@ -49,12 +49,12 @@ export function EmojiPicker({
                 key={emoji.id}
                 align="center"
                 gap={4}
+                onClick={() => handleSelect(emoji.id)}
                 className="overflow-hidden rounded-lg p-8 transition-all hover:bg-brand-50"
               >
                 <Flex
                   center
                   flex={1}
-                  onClick={() => handleSelect(emoji.id)}
                   className={cn('text-3xl', {
                     'bg-brand-100 ring-2 ring-brand-500':
                       selectedId === emoji.id,

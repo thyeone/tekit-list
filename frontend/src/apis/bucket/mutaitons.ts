@@ -1,6 +1,10 @@
 import { api } from '@/api'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import type { CompletePartialUpdateParams, IBucketCreate } from 'api'
+import type {
+  BucketUpdateParams,
+  CompletePartialUpdateParams,
+  IBucketCreate,
+} from 'api'
 import { bucketKeys } from './keys'
 
 export const bucketMutations = {
@@ -17,10 +21,20 @@ export const bucketMutations = {
   },
 
   create: () => {
+    return useMutation({
+      mutationFn: (params: IBucketCreate) => api().bucket.bucketCreate(params),
+    })
+  },
+
+  update: () => {
     const queryClient = useQueryClient()
 
     return useMutation({
-      mutationFn: (params: IBucketCreate) => api().bucket.bucketCreate(params),
+      mutationFn: ({ id, ...params }: BucketUpdateParams & IBucketCreate) =>
+        api().bucket.bucketUpdate({ id }, params),
+      onSuccess: ({ id }) => {
+        queryClient.invalidateQueries({ queryKey: bucketKeys.detail(id) })
+      },
     })
   },
 }
