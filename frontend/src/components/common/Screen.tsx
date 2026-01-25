@@ -1,6 +1,7 @@
 import { Box } from '@/headless/ui/Box'
 import { Col, Flex } from '@/headless/ui/Flex'
 import { cn } from '@/utils/cn'
+import { Header } from './Header'
 
 type ScreenProps = {
   className?: string
@@ -25,6 +26,7 @@ export function Screen({
       className={cn('min-h-dvh w-full bg-gray-50', className)}
     >
       {header}
+      <Header.Spacing />
       <Col className={cn('px-16', innerClassName)}>{children}</Col>
       {bottomFixedButton && (
         <Flex

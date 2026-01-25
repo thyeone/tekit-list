@@ -30,7 +30,7 @@ export default function Index() {
     status: 'ALL',
   })
 
-  const { rows, listBottom, data } = useInfiniteList({
+  const { rows, listBottom, data, total } = useInfiniteList({
     key: bucketKeys.list.__list,
     fn: api().bucket.bucketList,
     params: {
@@ -62,6 +62,7 @@ export default function Index() {
           📋 버킷 추가
         </Button>
       }
+      className="pb-52"
     >
       <p className="mt-24 text-2xl">
         아직 완료하지 못한 버킷리스트가
@@ -125,9 +126,9 @@ export default function Index() {
           <p className="font-medium text-base text-grey-900">진행률</p>
           <p className="font-medium text-18-bd text-grey-900">
             <span className="text-brand-500">
-              {rows.filter((row) => row.isCompleted).length}
+              {total - rows.filter((row) => row.isCompleted).length}
             </span>
-            {` / ${rows.length}`}
+            {` / ${total}`}
           </p>
         </Row>
         <Box className="relative mt-8 h-8 w-full overflow-hidden rounded-full bg-gray-200">

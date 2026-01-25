@@ -1,5 +1,6 @@
 import { IconButton } from '@/headless/icon/Icon'
 import { Flex, type FlexProps } from '@/headless/ui/Flex'
+import { Spacing } from '@/headless/ui/Spacing'
 import { cn } from '@/utils/cn'
 import { useRouter } from '@tanstack/react-router'
 
@@ -8,7 +9,7 @@ export function Header({ className, ...rest }: FlexProps) {
     <Flex
       as="header"
       className={cn(
-        'sticky inset-x-0 top-0 z-header h-52 w-full bg-white px-20',
+        'fixed inset-x-0 top-0 z-header h-52 w-full bg-white px-20',
         className,
       )}
       {...rest}
@@ -64,4 +65,8 @@ Header.Back = ({ onClick }: { onClick?: VoidFunction }) => {
       />
     </Header.Left>
   )
+}
+
+Header.Spacing = () => {
+  return <Spacing size={52} />
 }

@@ -32,7 +32,7 @@ export class BucketService {
       }
     }
 
-    const buckets = await this.em.find(Bucket, where, {
+    const [buckets, totalCount] = await this.em.findAndCount(Bucket, where, {
       orderBy: { createdAt: orderBy.createdAt, id: orderBy.createdAt },
       populate: ['emoji'],
       limit: limit + 1,
@@ -41,12 +41,7 @@ export class BucketService {
     const uncompletedCount = await this.em.count(Bucket, { isCompleted: false });
 
     return {
-      ...cursorPagination(
-        buckets,
-        limit,
-        (entity) => Bucket.buildRO(entity),
-        (entity) => entity.id,
-      ),
+      ...cursorPagination({ entities: buckets, limit, total: totalCount, buildRO: (entity) => Bucket.buildRO(entity) }),
       uncompletedCount,
     };
   }
