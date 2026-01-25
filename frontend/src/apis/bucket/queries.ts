@@ -8,7 +8,6 @@ export const bucketQueries = {
     queryOptions({
       queryKey: bucketKeys.list.__list(params),
       queryFn: () => api().bucket.bucketList(params),
-      initialData: [],
     }),
 
   detail: (id: number) =>

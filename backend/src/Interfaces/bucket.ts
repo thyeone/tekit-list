@@ -1,4 +1,5 @@
 import { Emoji } from '@/resources/emoji/emoji.entity';
+import { IGeneral } from './general';
 
 export namespace IBucket {
   export interface Create {
@@ -22,9 +23,5 @@ export namespace IBucket {
     isCompleted: boolean;
   }
 
-  export interface PaginatedRO {
-    rows: RO[];
-    nextCursor: number | null;
-    hasMore: boolean;
-  }
+  export interface PaginatedRO extends IGeneral.PaginationCursorRO<RO> {}
 }

@@ -13,11 +13,6 @@ export class BucketController {
    *
    * @summary 버킷 리스트 목록 조회
    * @tag Bucket
-   * @param query.orderBy 정렬 순서
-   * @param query.status 완료 상태 필터 (ALL | COMPLETED | INCOMPLETED)
-   * @param query.cursor 커서 (마지막으로 본 항목의 ID)
-   * @param query.limit 한 번에 가져올 항목 수 (기본값: 10)
-   * @returns 페이지네이션된 버킷 리스트
    */
   @TypedRoute.Get()
   async findAll(

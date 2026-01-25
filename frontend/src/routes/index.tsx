@@ -1,4 +1,5 @@
-import { bucketQueries } from '@/apis/bucket/queries'
+import { api } from '@/api'
+import { bucketKeys } from '@/apis/bucket/keys'
 import { BucketCard } from '@/components/BucketCard'
 import { Button } from '@/components/common/Button'
 import { Header } from '@/components/common/Header'
@@ -11,7 +12,7 @@ import { Col, Flex, Row } from '@/headless/ui/Flex'
 import { List } from '@/headless/ui/List'
 import { Spacing } from '@/headless/ui/Spacing'
 import { useQueryParams } from '@/hooks/use-query-params-react'
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteList } from '@/hooks/useInfiniteList'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import type { OrderByEnum, StatusEnum } from 'api'
 import { useCallback, useMemo } from 'react'
@@ -28,9 +29,16 @@ export default function Index() {
     orderBy: 'DESC',
     status: 'ALL',
   })
-  const { data } = useQuery(
-    bucketQueries.list({ orderBy: query.orderBy, status: query.status }),
-  )
+
+  const { rows, listBottom } = useInfiniteList({
+    key: bucketKeys.list.__list,
+    fn: api().bucket.bucketList,
+    params: {
+      orderBy: query.orderBy,
+      status: query.status,
+      limit: 10,
+    },
+  })
 
   const onRefresh = useCallback(() => {
     setParams({ orderBy: 'DESC', status: 'ALL' })
@@ -38,9 +46,9 @@ export default function Index() {
 
   const progress = useMemo(() => {
     return Math.round(
-      (data.filter((row) => row.isCompleted).length / data.length) * 100,
+      (rows.filter((row) => row.isCompleted).length / rows.length) * 100,
     )
-  }, [data])
+  }, [rows])
 
   return (
     <Screen
@@ -59,7 +67,7 @@ export default function Index() {
         <span className="font-bold">태현</span>님이 채운 버킷리스트가
         <br />
         <span className="font-bold text-brand-500">
-          {data.filter((row) => !row.isCompleted).length}개{' '}
+          {rows.filter((row) => !row.isCompleted).length}개{' '}
         </span>
         남았어요!
       </p>
@@ -117,9 +125,9 @@ export default function Index() {
           <p className="font-medium text-base text-grey-900">진행률</p>
           <p className="font-medium text-18-bd text-grey-900">
             <span className="text-brand-500">
-              {data.filter((row) => row.isCompleted).length}
+              {rows.filter((row) => row.isCompleted).length}
             </span>
-            {` / ${data.length}`}
+            {` / ${rows.length}`}
           </p>
         </Row>
         <Box className="relative mt-8 h-8 w-full overflow-hidden rounded-full bg-gray-200">
@@ -133,10 +141,12 @@ export default function Index() {
       </Col>
 
       <List
-        data={data}
+        data={rows}
         gap={8}
         renderItem={(bucket) => <BucketCard bucket={bucket} />}
+        bottomElement={<div ref={listBottom} />}
       />
+      <div ref={listBottom} />
     </Screen>
   )
 }

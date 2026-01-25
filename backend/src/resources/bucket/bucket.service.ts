@@ -1,4 +1,5 @@
 import type { IBucket } from '@/Interfaces/bucket';
+import { cursorPagination } from '@/utils/pagination.helper';
 import { EntityManager, FilterQuery, QueryOrder } from '@mikro-orm/core';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Emoji } from '../emoji/emoji.entity';
@@ -16,7 +17,6 @@ export class BucketService {
   ): Promise<IBucket.PaginatedRO> {
     const where: FilterQuery<Bucket> = {};
 
-    // 상태 필터링
     if (status === 'COMPLETED') {
       where.isCompleted = true;
     }
@@ -24,7 +24,6 @@ export class BucketService {
       where.isCompleted = false;
     }
 
-    // 커서 기반 페이지네이션
     if (cursor) {
       if (orderBy.createdAt === QueryOrder.DESC) {
         where.id = { $lt: cursor };
@@ -33,22 +32,18 @@ export class BucketService {
       }
     }
 
-    // limit + 1개를 가져와서 다음 페이지 존재 여부 확인
     const buckets = await this.em.find(Bucket, where, {
       orderBy: { createdAt: orderBy.createdAt, id: orderBy.createdAt },
       populate: ['emoji'],
       limit: limit + 1,
     });
 
-    const hasMore = buckets.length > limit;
-    const data = hasMore ? buckets.slice(0, limit) : buckets;
-    const nextCursor = hasMore ? data[data.length - 1].id : null;
-
-    return {
-      rows: data.map((bucket) => Bucket.buildRO(bucket)),
-      nextCursor,
-      hasMore,
-    };
+    return cursorPagination(
+      buckets,
+      limit,
+      (entity) => Bucket.buildRO(entity),
+      (entity) => entity.id,
+    );
   }
 
   async findOne(id: number): Promise<IBucket.RO> {
