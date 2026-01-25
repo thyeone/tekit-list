@@ -21,4 +21,10 @@ export namespace IBucket {
     description?: string;
     isCompleted: boolean;
   }
+
+  export interface PaginatedRO {
+    rows: RO[];
+    nextCursor: number | null;
+    hasMore: boolean;
+  }
 }

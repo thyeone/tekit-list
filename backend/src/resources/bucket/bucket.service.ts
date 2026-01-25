@@ -11,21 +11,44 @@ export class BucketService {
   async findAll(
     orderBy: { createdAt: QueryOrder },
     status?: 'ALL' | 'COMPLETED' | 'INCOMPLETED',
-  ): Promise<IBucket.RO[]> {
+    cursor?: number,
+    limit: number = 10,
+  ): Promise<IBucket.PaginatedRO> {
     const where: FilterQuery<Bucket> = {};
 
+    // 상태 필터링
     if (status === 'COMPLETED') {
       where.isCompleted = true;
     }
     if (status === 'INCOMPLETED') {
       where.isCompleted = false;
     }
+
+    // 커서 기반 페이지네이션
+    if (cursor) {
+      if (orderBy.createdAt === QueryOrder.DESC) {
+        where.id = { $lt: cursor };
+      } else {
+        where.id = { $gt: cursor };
+      }
+    }
+
+    // limit + 1개를 가져와서 다음 페이지 존재 여부 확인
     const buckets = await this.em.find(Bucket, where, {
-      orderBy: { createdAt: orderBy.createdAt },
+      orderBy: { createdAt: orderBy.createdAt, id: orderBy.createdAt },
       populate: ['emoji'],
+      limit: limit + 1,
     });
 
-    return buckets.map((bucket) => Bucket.buildRO(bucket));
+    const hasMore = buckets.length > limit;
+    const data = hasMore ? buckets.slice(0, limit) : buckets;
+    const nextCursor = hasMore ? data[data.length - 1].id : null;
+
+    return {
+      rows: data.map((bucket) => Bucket.buildRO(bucket)),
+      nextCursor,
+      hasMore,
+    };
   }
 
   async findOne(id: number): Promise<IBucket.RO> {

@@ -49,7 +49,7 @@ export function BucketCard({ bucket }: { bucket: IBucketRO }) {
       <Row align="center" gap={8} className="ml-auto">
         <Flex
           center
-          className={cn('w-fit rounded-4xl px-8 py-4 font-semibold text-xs', {
+          className={cn('w-fit rounded-md px-8 py-4 font-semibold text-xs', {
             'bg-blue-100 text-blue-500':
               dayjs(bucket.dueDate).diff(dayjs(), 'day') > 7,
             'bg-red-100 text-red-500':
