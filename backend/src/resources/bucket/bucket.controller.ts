@@ -9,6 +9,18 @@ export class BucketController {
   constructor(private readonly bucketService: BucketService) {}
 
   /**
+   * 버킷 리스트 미완료 개수 조회
+   *
+   * @summary 버킷 리스트 미완료 개수 조회
+   * @tag Bucket
+   * @returns 버킷 리스트 미완료 개수
+   */
+  @TypedRoute.Get('uncompleted-count')
+  async findUncompletedCount(): Promise<number> {
+    return await this.bucketService.findUncompletedCount();
+  }
+
+  /**
    * 버킷 리스트 전체 조회 (커서 페이지네이션)
    *
    * @summary 버킷 리스트 목록 조회

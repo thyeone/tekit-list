@@ -6,6 +6,8 @@ export const bucketKeys = {
     all: () => [...bucketKeys.all, 'list'] as const,
     __list: (params: BucketListParams) =>
       [...bucketKeys.list.all(), params] as const,
+    uncompletedCount: () =>
+      [...bucketKeys.list.all(), 'uncompletedCount'] as const,
   },
   detail: (id: number) => [...bucketKeys.all, 'detail', id] as const,
 } as const

@@ -9,7 +9,7 @@ export function Header({ className, ...rest }: FlexProps) {
     <Flex
       as="header"
       className={cn(
-        'fixed inset-x-0 top-0 z-header h-52 w-full bg-white px-20',
+        'fixed inset-x-0 top-0 z-header mx-auto h-52 w-full max-w-base bg-white px-20',
         className,
       )}
       {...rest}

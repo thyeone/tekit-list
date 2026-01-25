@@ -38,12 +38,12 @@ export class BucketService {
       limit: limit + 1,
     });
 
-    const uncompletedCount = await this.em.count(Bucket, { isCompleted: false });
-
-    return {
-      ...cursorPagination({ entities: buckets, limit, total: totalCount, buildRO: (entity) => Bucket.buildRO(entity) }),
-      uncompletedCount,
-    };
+    return cursorPagination({
+      entities: buckets,
+      limit,
+      total: totalCount,
+      buildRO: (entity) => Bucket.buildRO(entity),
+    });
   }
 
   async findOne(id: number): Promise<IBucket.RO> {
@@ -54,6 +54,10 @@ export class BucketService {
     }
 
     return Bucket.buildRO(bucket);
+  }
+
+  async findUncompletedCount(): Promise<number> {
+    return await this.em.count(Bucket, { isCompleted: false });
   }
 
   async create(create: IBucket.Create): Promise<IBucket.RO> {

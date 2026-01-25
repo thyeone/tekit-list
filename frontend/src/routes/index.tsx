@@ -1,5 +1,6 @@
 import { api } from '@/api'
 import { bucketKeys } from '@/apis/bucket/keys'
+import { bucketQueries } from '@/apis/bucket/queries'
 import { BucketCard } from '@/components/BucketCard'
 import { Button } from '@/components/common/Button'
 import { Header } from '@/components/common/Header'
@@ -13,6 +14,7 @@ import { List } from '@/headless/ui/List'
 import { Spacing } from '@/headless/ui/Spacing'
 import { useQueryParams } from '@/hooks/use-query-params-react'
 import { useInfiniteList } from '@/hooks/useInfiniteList'
+import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import type { OrderByEnum, StatusEnum } from 'api'
 import { useCallback, useMemo } from 'react'
@@ -29,6 +31,8 @@ export default function Index() {
     orderBy: 'DESC',
     status: 'ALL',
   })
+
+  const { data: uncompletedCount } = useQuery(bucketQueries.uncompletedCount())
 
   const { rows, listBottom, data, total } = useInfiniteList({
     key: bucketKeys.list.__list,
@@ -68,7 +72,7 @@ export default function Index() {
         아직 완료하지 못한 버킷리스트가
         <br />
         <span className="font-bold text-brand-500">
-          {data?.pages[0].total}개{' '}
+          {uncompletedCount ?? 0}개{' '}
         </span>
         남았어요!
       </p>
@@ -125,9 +129,7 @@ export default function Index() {
         <Row align="center" justify="between">
           <p className="font-medium text-base text-grey-900">진행률</p>
           <p className="font-medium text-18-bd text-grey-900">
-            <span className="text-brand-500">
-              {total - rows.filter((row) => row.isCompleted).length}
-            </span>
+            <span className="text-brand-500">{uncompletedCount}</span>
             {` / ${total}`}
           </p>
         </Row>
