@@ -1,4 +1,4 @@
-import { Emoji } from '@/modules/emoji/emoji.entity';
+import { Emoji } from '@/resources/emoji/emoji.entity';
 
 export namespace IBucket {
   export interface Create {
