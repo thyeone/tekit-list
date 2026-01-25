@@ -129,7 +129,9 @@ export default function Index() {
         <Row align="center" justify="between">
           <p className="font-medium text-base text-grey-900">진행률</p>
           <p className="font-medium text-18-bd text-grey-900">
-            <span className="text-brand-500">{uncompletedCount}</span>
+            <span className="text-brand-500">
+              {total - (uncompletedCount ?? 0)}
+            </span>
             {` / ${total}`}
           </p>
         </Row>

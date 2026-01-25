@@ -12,7 +12,7 @@ export const bucketQueries = {
 
   uncompletedCount: () =>
     queryOptions({
-      queryKey: bucketKeys.list.uncompletedCount(),
+      queryKey: bucketKeys.uncompletedCount(),
       queryFn: () => api().bucket.uncompletedCountList(),
     }),
 

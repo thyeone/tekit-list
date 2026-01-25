@@ -22,7 +22,7 @@ export function Button<C extends React.ElementType = 'button'>({
       center
       gap={8}
       className={cn(
-        'rounded-[12px] bg-primary px-24 py-10 font-semibold text-lg text-white transition-all hover:opacity-80 active:scale-95 disabled:opacity-50',
+        'w-full rounded-[12px] bg-primary px-24 py-10 font-semibold text-lg text-white transition-all hover:opacity-90 active:scale-95 disabled:opacity-50',
         {
           'mx-auto w-fit': size === 'sm',
           'bg-grey-100 text-grey-900': variant === 'secondary',

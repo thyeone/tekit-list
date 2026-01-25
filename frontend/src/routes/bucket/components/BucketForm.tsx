@@ -118,6 +118,7 @@ export function BucketForm({ bucket, emoji }: BucketFormProps) {
                 onClose={() => {
                   close()
                 }}
+                selectedId={form.watch('emoji')?.id}
                 onSelect={(emojiId) => {
                   const __emoji = emoji?.find((e) => e.id === emojiId)
 
