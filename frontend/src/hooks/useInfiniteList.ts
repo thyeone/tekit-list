@@ -74,6 +74,7 @@ export const useInfiniteList = <T, P extends Params = Params>({
   return {
     rows,
     listBottom,
+    total: query.data?.pages[0].total ?? 0,
     ...query,
   }
 }

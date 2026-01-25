@@ -23,5 +23,7 @@ export namespace IBucket {
     isCompleted: boolean;
   }
 
-  export interface PaginatedRO extends IGeneral.PaginationCursorRO<RO> {}
+  export interface PaginatedRO extends IGeneral.PaginationCursorRO<RO> {
+    uncompletedCount: number;
+  }
 }

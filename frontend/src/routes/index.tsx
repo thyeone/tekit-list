@@ -30,7 +30,7 @@ export default function Index() {
     status: 'ALL',
   })
 
-  const { rows, listBottom } = useInfiniteList({
+  const { rows, listBottom, data } = useInfiniteList({
     key: bucketKeys.list.__list,
     fn: api().bucket.bucketList,
     params: {
@@ -64,10 +64,10 @@ export default function Index() {
       }
     >
       <p className="mt-24 text-2xl">
-        <span className="font-bold">태현</span>님이 채운 버킷리스트가
+        아직 완료하지 못한 버킷리스트가
         <br />
         <span className="font-bold text-brand-500">
-          {rows.filter((row) => !row.isCompleted).length}개{' '}
+          {data?.pages[0].total}개{' '}
         </span>
         남았어요!
       </p>
