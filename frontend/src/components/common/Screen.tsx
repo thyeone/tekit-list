@@ -1,5 +1,6 @@
 import { Box } from '@/headless/ui/Box'
 import { Col, Flex } from '@/headless/ui/Flex'
+import { Spacing } from '@/headless/ui/Spacing'
 import { cn } from '@/utils/cn'
 import { Header } from './Header'
 
@@ -9,6 +10,7 @@ type ScreenProps = {
   header?: React.ReactNode
   bottomFixedButton?: React.ReactNode
   onSubmit?: VoidFunction
+  bottomSpacing?: number
 }
 
 export function Screen({
@@ -17,6 +19,7 @@ export function Screen({
   innerClassName,
   bottomFixedButton,
   header,
+  bottomSpacing = 48,
   onSubmit,
 }: PropsWithStrictChildren<ScreenProps>) {
   return (
@@ -36,6 +39,7 @@ export function Screen({
           <Box className="pointer-events-auto">{bottomFixedButton}</Box>
         </Flex>
       )}
+      {bottomSpacing && <Spacing size={bottomSpacing} />}
     </Col>
   )
 }

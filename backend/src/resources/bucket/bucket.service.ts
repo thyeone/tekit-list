@@ -56,8 +56,16 @@ export class BucketService {
     return Bucket.buildRO(bucket);
   }
 
-  async findUncompletedCount(): Promise<number> {
-    return await this.em.count(Bucket, { isCompleted: false });
+  async findCount(): Promise<IBucket.CountRO> {
+    const totalCount = await this.em.count(Bucket);
+    const uncompletedCount = await this.em.count(Bucket, { isCompleted: false });
+    const completedCount = await this.em.count(Bucket, { isCompleted: true });
+
+    return {
+      totalCount,
+      uncompletedCount,
+      completedCount,
+    };
   }
 
   async create(create: IBucket.Create): Promise<IBucket.RO> {

@@ -15,17 +15,11 @@ export class BucketController {
    * @tag Bucket
    * @returns 버킷 리스트 미완료 개수
    */
-  @TypedRoute.Get('uncompleted-count')
-  async findUncompletedCount(): Promise<number> {
-    return await this.bucketService.findUncompletedCount();
+  @TypedRoute.Get('count')
+  async findCount(): Promise<IBucket.CountRO> {
+    return await this.bucketService.findCount();
   }
 
-  /**
-   * 버킷 리스트 전체 조회 (커서 페이지네이션)
-   *
-   * @summary 버킷 리스트 목록 조회
-   * @tag Bucket
-   */
   @TypedRoute.Get()
   async findAll(
     @TypedQuery()

@@ -2,7 +2,7 @@ import type { BucketListParams } from 'api'
 
 export const bucketKeys = {
   all: ['bucket'] as const,
-  uncompletedCount: () => [...bucketKeys.all, 'uncompletedCount'] as const,
+  count: () => [...bucketKeys.all, 'count'] as const,
   list: {
     all: () => [...bucketKeys.all, 'list'] as const,
     __list: (params: BucketListParams) =>

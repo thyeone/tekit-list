@@ -10,10 +10,10 @@ export const bucketQueries = {
       queryFn: () => api().bucket.bucketList(params),
     }),
 
-  uncompletedCount: () =>
+  count: () =>
     queryOptions({
-      queryKey: bucketKeys.uncompletedCount(),
-      queryFn: () => api().bucket.uncompletedCountList(),
+      queryKey: bucketKeys.count(),
+      queryFn: () => api().bucket.countList(),
     }),
 
   detail: (id: number) =>

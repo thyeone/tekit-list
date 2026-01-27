@@ -32,9 +32,9 @@ export default function Index() {
     status: 'ALL',
   })
 
-  const { data: uncompletedCount } = useQuery(bucketQueries.uncompletedCount())
+  const { data: count } = useQuery(bucketQueries.count())
 
-  const { rows, listBottom, data, total } = useInfiniteList({
+  const { rows, listBottom, total } = useInfiniteList({
     key: bucketKeys.list.__list,
     fn: api().bucket.bucketList,
     params: {
@@ -50,9 +50,9 @@ export default function Index() {
 
   const progress = useMemo(() => {
     return Math.round(
-      (rows.filter((row) => row.isCompleted).length / rows.length) * 100,
+      ((count?.completedCount ?? 0) / (count?.totalCount ?? 0)) * 100,
     )
-  }, [rows])
+  }, [count])
 
   return (
     <Screen
@@ -66,18 +66,17 @@ export default function Index() {
           📋 버킷 추가
         </Button>
       }
-      className="pb-52"
     >
       <p className="mt-24 text-2xl">
         아직 완료하지 못한 버킷리스트가
         <br />
         <span className="font-bold text-brand-500">
-          {uncompletedCount ?? 0}개{' '}
+          {count?.uncompletedCount ?? 0}개{' '}
         </span>
         남았어요!
       </p>
 
-      <Spacing size={48} />
+      <Spacing size={36} />
       <Flex align="center" gap={8} className="mb-16">
         <Select
           options={[
@@ -130,9 +129,9 @@ export default function Index() {
           <p className="font-medium text-base text-grey-900">진행률</p>
           <p className="font-medium text-18-bd text-grey-900">
             <span className="text-brand-500">
-              {total - (uncompletedCount ?? 0)}
+              {count?.uncompletedCount ?? 0}
             </span>
-            {` / ${total}`}
+            {` / ${count?.totalCount ?? 0}`}
           </p>
         </Row>
         <Box className="relative mt-8 h-8 w-full overflow-hidden rounded-full bg-gray-200">
