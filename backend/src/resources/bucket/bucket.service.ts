@@ -3,6 +3,7 @@ import { cursorPagination } from '@/utils/pagination.helper';
 import { EntityManager, FilterQuery, QueryOrder } from '@mikro-orm/core';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Emoji } from '../emoji/emoji.entity';
+import { User } from '../user/user.entity';
 import { Bucket } from './bucket.entity';
 
 @Injectable()
@@ -10,12 +11,15 @@ export class BucketService {
   constructor(private readonly em: EntityManager) {}
 
   async findAll(
+    userId: string,
     orderBy: { createdAt: QueryOrder },
     status?: 'ALL' | 'COMPLETED' | 'INCOMPLETED',
     cursor?: number,
     limit: number = 10,
   ): Promise<IBucket.PaginatedRO> {
-    const where: FilterQuery<Bucket> = {};
+    const where: FilterQuery<Bucket> = {
+      user: { id: userId },
+    };
 
     if (status === 'COMPLETED') {
       where.isCompleted = true;
@@ -46,8 +50,8 @@ export class BucketService {
     });
   }
 
-  async findOne(id: number): Promise<IBucket.RO> {
-    const bucket = await this.em.findOne(Bucket, { id }, { populate: ['emoji'] });
+  async findOne(userId: string, id: number): Promise<IBucket.RO> {
+    const bucket = await this.em.findOne(Bucket, { id, user: { id: userId } }, { populate: ['emoji'] });
 
     if (!bucket) {
       throw new NotFoundException('Bucket not found');
@@ -56,10 +60,16 @@ export class BucketService {
     return Bucket.buildRO(bucket);
   }
 
-  async findCount(): Promise<IBucket.CountRO> {
-    const totalCount = await this.em.count(Bucket);
-    const uncompletedCount = await this.em.count(Bucket, { isCompleted: false });
-    const completedCount = await this.em.count(Bucket, { isCompleted: true });
+  async findCount(userId: string): Promise<IBucket.CountRO> {
+    const totalCount = await this.em.count(Bucket, { user: { id: userId } });
+    const uncompletedCount = await this.em.count(Bucket, {
+      user: { id: userId },
+      isCompleted: false,
+    });
+    const completedCount = await this.em.count(Bucket, {
+      user: { id: userId },
+      isCompleted: true,
+    });
 
     return {
       totalCount,
@@ -68,7 +78,12 @@ export class BucketService {
     };
   }
 
-  async create(create: IBucket.Create): Promise<IBucket.RO> {
+  async create(userId: string, create: IBucket.Create): Promise<IBucket.RO> {
+    const user = await this.em.findOne(User, { id: userId });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
     const emoji = await this.em.findOne(Emoji, { id: Number(create.emojiId) });
     if (!emoji) {
       throw new NotFoundException('Emoji not found');
@@ -76,6 +91,7 @@ export class BucketService {
 
     const bucket = this.em.create(Bucket, {
       ...create,
+      user,
       emoji,
     });
     await this.em.flush();
@@ -83,8 +99,8 @@ export class BucketService {
     return Bucket.buildRO(bucket);
   }
 
-  async remove(id: number): Promise<void> {
-    const bucket = await this.em.findOne(Bucket, { id });
+  async remove(userId: string, id: number): Promise<void> {
+    const bucket = await this.em.findOne(Bucket, { id, user: { id: userId } });
 
     if (!bucket) {
       throw new NotFoundException('Bucket not found');
@@ -93,8 +109,8 @@ export class BucketService {
     await this.em.remove(bucket).flush();
   }
 
-  async updateCompleteBucket(id: number): Promise<void> {
-    const bucket = await this.em.findOne(Bucket, { id });
+  async updateCompleteBucket(userId: string, id: number): Promise<void> {
+    const bucket = await this.em.findOne(Bucket, { id, user: { id: userId } });
 
     if (!bucket) {
       throw new NotFoundException('Bucket not found');
@@ -104,8 +120,8 @@ export class BucketService {
     await this.em.flush();
   }
 
-  async update(id: number, update: IBucket.Create): Promise<IBucket.RO> {
-    const bucket = await this.em.findOne(Bucket, { id }, { populate: ['emoji'] });
+  async update(userId: string, id: number, update: IBucket.Create): Promise<IBucket.RO> {
+    const bucket = await this.em.findOne(Bucket, { id, user: { id: userId } }, { populate: ['emoji'] });
 
     if (!bucket) {
       throw new NotFoundException('Bucket not found');

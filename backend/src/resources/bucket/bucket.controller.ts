@@ -1,10 +1,13 @@
 import type { IBucket } from '@/Interfaces/bucket';
+import { AuthGuard } from '@/guards/auth.guard';
+import { UserId } from '@/modules/auth/decorators/auth.decorator';
 import { QueryOrder } from '@mikro-orm/core';
 import { TypedBody, TypedParam, TypedQuery, TypedRoute } from '@nestia/core';
-import { Controller } from '@nestjs/common';
+import { Controller, UseGuards } from '@nestjs/common';
 import { BucketService } from './bucket.service';
 
 @Controller('bucket')
+@UseGuards(AuthGuard)
 export class BucketController {
   constructor(private readonly bucketService: BucketService) {}
 
@@ -13,15 +16,17 @@ export class BucketController {
    *
    * @summary 버킷 리스트 미완료 개수 조회
    * @tag Bucket
+   * @security bearer
    * @returns 버킷 리스트 미완료 개수
    */
   @TypedRoute.Get('count')
-  async findCount(): Promise<IBucket.CountRO> {
-    return await this.bucketService.findCount();
+  async findCount(@UserId() userId: string): Promise<IBucket.CountRO> {
+    return await this.bucketService.findCount(userId);
   }
 
   @TypedRoute.Get()
   async findAll(
+    @UserId() userId: string,
     @TypedQuery()
     query: {
       orderBy?: QueryOrder;
@@ -35,6 +40,7 @@ export class BucketController {
     },
   ): Promise<IBucket.PaginatedRO> {
     return await this.bucketService.findAll(
+      userId,
       { createdAt: query.orderBy || QueryOrder.DESC },
       query.status,
       query.cursor,
@@ -47,12 +53,13 @@ export class BucketController {
    *
    * @summary 버킷 리스트 상세 조회
    * @tag Bucket
+   * @security bearer
    * @param id 버킷 ID
    * @returns 버킷 리스트 정보
    */
   @TypedRoute.Get(':id')
-  async findOne(@TypedParam('id') id: number): Promise<IBucket.RO> {
-    return await this.bucketService.findOne(id);
+  async findOne(@UserId() userId: string, @TypedParam('id') id: number): Promise<IBucket.RO> {
+    return await this.bucketService.findOne(userId, id);
   }
 
   /**
@@ -60,12 +67,13 @@ export class BucketController {
    *
    * @summary 버킷 리스트 생성
    * @tag Bucket
+   * @security bearer
    * @param create 생성할 버킷 정보
    * @returns 생성된 버킷 리스트
    */
   @TypedRoute.Post()
-  async create(@TypedBody() create: IBucket.Create): Promise<IBucket.RO> {
-    return await this.bucketService.create(create);
+  async create(@UserId() userId: string, @TypedBody() create: IBucket.Create): Promise<IBucket.RO> {
+    return await this.bucketService.create(userId, create);
   }
 
   /**
@@ -73,11 +81,12 @@ export class BucketController {
    *
    * @summary 버킷 리스트 삭제
    * @tag Bucket
+   * @security bearer
    * @param id 삭제할 버킷 ID
    */
   @TypedRoute.Delete(':id')
-  async remove(@TypedParam('id') id: number): Promise<void> {
-    return await this.bucketService.remove(id);
+  async remove(@UserId() userId: string, @TypedParam('id') id: number): Promise<void> {
+    return await this.bucketService.remove(userId, id);
   }
 
   /**
@@ -85,13 +94,18 @@ export class BucketController {
    *
    * @summary 버킷 리스트 수정
    * @tag Bucket
+   * @security bearer
    * @param id 수정할 버킷 ID
    * @param update 수정할 버킷 정보
    * @returns 수정된 버킷 리스트
    */
   @TypedRoute.Put(':id')
-  async update(@TypedParam('id') id: number, @TypedBody() update: IBucket.Create): Promise<IBucket.RO> {
-    return await this.bucketService.update(id, update);
+  async update(
+    @UserId() userId: string,
+    @TypedParam('id') id: number,
+    @TypedBody() update: IBucket.Create,
+  ): Promise<IBucket.RO> {
+    return await this.bucketService.update(userId, id, update);
   }
 
   /**
@@ -99,10 +113,11 @@ export class BucketController {
    *
    * @summary 버킷 리스트 완료 상태 업데이트
    * @tag Bucket
+   * @security bearer
    * @param id 완료 상태를 업데이트할 버킷 ID
    */
   @TypedRoute.Patch(':id/complete')
-  async updateCompleteBucket(@TypedParam('id') id: number): Promise<void> {
-    return await this.bucketService.updateCompleteBucket(id);
+  async updateCompleteBucket(@UserId() userId: string, @TypedParam('id') id: number): Promise<void> {
+    return await this.bucketService.updateCompleteBucket(userId, id);
   }
 }

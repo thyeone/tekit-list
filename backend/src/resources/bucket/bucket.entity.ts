@@ -1,6 +1,7 @@
 import { IBucket } from '@/Interfaces/bucket';
 import { Entity, ManyToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
 import { Emoji } from '../emoji/emoji.entity';
+import { User } from '../user/user.entity';
 
 @Entity()
 export class Bucket {
@@ -17,6 +18,9 @@ export class Bucket {
     default: false,
   })
   isCompleted: Opt<boolean> = false;
+
+  @ManyToOne()
+  user!: User;
 
   @ManyToOne()
   emoji!: Emoji;

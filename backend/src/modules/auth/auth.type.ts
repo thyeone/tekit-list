@@ -37,6 +37,13 @@ export interface OAuthUserInfo {
   provider: OAuthProvider;
 }
 
+export interface TokenPayload {
+  sub: string; // userId (UUID)
+  provider: string;
+  iat?: number;
+  exp?: number;
+}
+
 export abstract class OAuthProviderHandler {
   abstract getToken(code: string): Promise<TokenResponse>;
 }
