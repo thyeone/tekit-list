@@ -25,42 +25,28 @@ export class AuthService {
     };
   }
 
-  async validate(provider: OAuthProvider, code: string): Promise<TokenResponse> {
-    const oAuth = this.getOAuthProvider(provider);
+  async getOAuthToken(provider: OAuthProvider, code: string): Promise<TokenResponse> {
+    return await this.getOAuthProvider(provider).getToken(code);
+  }
 
-    // OAuth 토큰 발급
-    const oauthTokens = await oAuth.getToken(code);
-
-    // 카카오 사용자 정보 조회
-    let userInfo: OAuthUserInfo | undefined;
-    if (provider === OAuthProvider.KAKAO) {
-      userInfo = await this.kakaoProvider.getUserInfo(oauthTokens.accessToken);
-    }
-
+  async generateToken(userInfo: OAuthUserInfo): Promise<TokenResponse> {
     if (!userInfo) {
       throw new BadRequestException('사용자 정보를 가져올 수 없습니다.');
     }
 
-    // 사용자 생성 또는 조회
-    const user = await this.userService.findOrCreate({
-      provider: userInfo.provider,
-      providerId: String(userInfo.id),
-      nickname: userInfo.name,
-    });
+    let user = await this.userService.findByProviderId(userInfo.provider, String(userInfo.id));
 
-    // JWT 토큰 생성
-    const tokens = await this.generateTokens(user.id, provider);
+    if (!user) {
+      user = await this.userService.createUser({
+        provider: userInfo.provider,
+        providerId: String(userInfo.id),
+        nickname: userInfo.name,
+      });
+    }
 
-    // 리프레시 토큰 저장
-    await this.userService.updateRefreshToken(user.id, tokens.refreshToken);
-
-    return tokens;
-  }
-
-  async generateTokens(userId: string, provider: OAuthProvider): Promise<TokenResponse> {
     const payload = {
-      sub: userId,
-      provider,
+      sub: user.id,
+      provider: userInfo.provider,
     };
 
     const accessToken = await this.jwtService.signAsync(payload, {
@@ -71,6 +57,8 @@ export class AuthService {
       expiresIn: '7d',
     });
 
+    await this.userService.updateRefreshToken(user.id, refreshToken);
+
     return {
       token_type: 'bearer',
       accessToken,
@@ -78,13 +66,18 @@ export class AuthService {
     };
   }
 
+  async getUserProfile(provider: OAuthProvider, accessToken: string): Promise<OAuthUserInfo> {
+    switch (provider) {
+      case OAuthProvider.KAKAO:
+        return this.kakaoProvider.getUserInfo(accessToken);
+
+      default:
+        throw new BadRequestException('지원하지 않는 인증 방법입니다.');
+    }
+  }
+
   createTokenResponse(res: Response, tokens: TokenResponse): void {
     res.cookie('auth-response', JSON.stringify(tokens), this.cookieOptions);
-
-    // res.json({
-    //   success: true,
-    //   message: '로그인 성공',
-    // });
 
     res.redirect(302, this.configService.get('oauth.redirectUri', { infer: true })!);
   }

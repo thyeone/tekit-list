@@ -4,7 +4,7 @@ import { HttpModule } from '@nestjs/axios';
 import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtAuthGuard } from '../../guards/auth.guard';
+import { AuthGuard } from '../../guards/auth.guard';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { KakaoProvider } from './providers/kakao.provider';
@@ -22,7 +22,7 @@ import { KakaoProvider } from './providers/kakao.provider';
     }),
   ],
   controllers: [AuthController],
-  providers: [KakaoProvider, AuthService, JwtAuthGuard],
-  exports: [JwtAuthGuard, AuthService, JwtModule],
+  providers: [KakaoProvider, AuthService, AuthGuard],
+  exports: [AuthGuard, AuthService, JwtModule],
 })
 export class AuthModule {}

@@ -25,7 +25,9 @@ export class AuthController {
    */
   @TypedRoute.Get('validate')
   async validate(@Res() res: Response, @TypedQuery() query: { provider: OAuthProvider; code: string }): Promise<void> {
-    const tokens = await this.authService.validate(query.provider, query.code);
+    const token = await this.authService.getOAuthToken(query.provider, query.code);
+    const userInfo = await this.authService.getUserProfile(query.provider, token.accessToken);
+    const tokens = await this.authService.generateToken(userInfo);
 
     this.authService.createTokenResponse(res, tokens);
   }
