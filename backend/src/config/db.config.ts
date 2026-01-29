@@ -11,7 +11,6 @@ export const dbConfig = () => {
 };
 
 const getMikroOrmConfig = (configService: ConfigService): Options => {
-  console.log(configService.get('DB_DATABASE'), 'test123213-0213');
   return {
     driver: PostgreSqlDriver,
     host: configService.get('DB_HOST'),

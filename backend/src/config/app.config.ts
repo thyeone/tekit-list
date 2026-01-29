@@ -1,7 +1,20 @@
 export const appConfig = () => ({
   port: process.env.PORT || 3088,
+  oauth: {
+    redirectUri: process.env.OAUTH_REDIRECT_URI,
+    kakao: {
+      clientId: process.env.OAUTH_KAKAO_CLIENT_ID,
+      clientSecret: process.env.OAUTH_KAKAO_CLIENT_SECRET,
+      redirectUri: process.env.OAUTH_KAKAO_REDIRECT_URI,
+    },
+  },
   cors: {
     origin: process.env.CORS_ORIGIN || '*',
+  },
+  jwt: {
+    secret: process.env.JWT_SECRET || 'default-secret-key',
+    accessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN || '1h',
+    refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
   },
   db: {
     host: process.env.DB_HOST,
@@ -13,3 +26,5 @@ export const appConfig = () => ({
   production: process.env.NODE_ENV === 'production',
   development: process.env.NODE_ENV === 'development',
 });
+
+export type AppConfig = ReturnType<typeof appConfig>;

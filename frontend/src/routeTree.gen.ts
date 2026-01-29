@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BucketCreateRouteImport } from './routes/bucket/create'
 import { Route as BucketBucketIdRouteImport } from './routes/bucket/$bucketId'
+import { Route as AuthLoginRouteImport } from './routes/auth/login'
+import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,33 +30,67 @@ const BucketBucketIdRoute = BucketBucketIdRouteImport.update({
   path: '/bucket/$bucketId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/auth/login',
+  path: '/auth/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/auth/login': typeof AuthLoginRoute
   '/bucket/$bucketId': typeof BucketBucketIdRoute
   '/bucket/create': typeof BucketCreateRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/auth/login': typeof AuthLoginRoute
   '/bucket/$bucketId': typeof BucketBucketIdRoute
   '/bucket/create': typeof BucketCreateRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/auth/login': typeof AuthLoginRoute
   '/bucket/$bucketId': typeof BucketBucketIdRoute
   '/bucket/create': typeof BucketCreateRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/bucket/$bucketId' | '/bucket/create'
+  fullPaths:
+    | '/'
+    | '/auth/callback'
+    | '/auth/login'
+    | '/bucket/$bucketId'
+    | '/bucket/create'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/bucket/$bucketId' | '/bucket/create'
-  id: '__root__' | '/' | '/bucket/$bucketId' | '/bucket/create'
+  to:
+    | '/'
+    | '/auth/callback'
+    | '/auth/login'
+    | '/bucket/$bucketId'
+    | '/bucket/create'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth/callback'
+    | '/auth/login'
+    | '/bucket/$bucketId'
+    | '/bucket/create'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthCallbackRoute: typeof AuthCallbackRoute
+  AuthLoginRoute: typeof AuthLoginRoute
   BucketBucketIdRoute: typeof BucketBucketIdRoute
   BucketCreateRoute: typeof BucketCreateRoute
 }
@@ -82,11 +118,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BucketBucketIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthCallbackRoute: AuthCallbackRoute,
+  AuthLoginRoute: AuthLoginRoute,
   BucketBucketIdRoute: BucketBucketIdRoute,
   BucketCreateRoute: BucketCreateRoute,
 }

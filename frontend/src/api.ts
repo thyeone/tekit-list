@@ -28,6 +28,7 @@ export function api<T>(): ApiInstance<T> {
       format: 'json',
       secure: true,
       cache: 'no-store',
+      credentials: 'include',
     },
     customFetch: async (input: RequestInfo | URL, init?: RequestInit) => {
       const response = await customFetch(input, init)

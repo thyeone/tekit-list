@@ -50,7 +50,7 @@ export default function Index() {
 
   const progress = useMemo(() => {
     return Math.round(
-      ((count?.completedCount ?? 0) / (count?.totalCount ?? 0)) * 100,
+      ((count?.uncompletedCount ?? 0) / (count?.totalCount ?? 0)) * 100,
     )
   }, [count])
 

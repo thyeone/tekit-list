@@ -6,7 +6,6 @@ import { Header } from './Header'
 
 type ScreenProps = {
   className?: string
-  innerClassName?: string
   header?: React.ReactNode
   bottomFixedButton?: React.ReactNode
   onSubmit?: VoidFunction
@@ -16,7 +15,6 @@ type ScreenProps = {
 export function Screen({
   children,
   className,
-  innerClassName,
   bottomFixedButton,
   header,
   bottomSpacing = 48,
@@ -26,11 +24,11 @@ export function Screen({
     <Col
       as={onSubmit ? 'form' : 'main'}
       onSubmit={onSubmit}
-      className={cn('min-h-dvh w-full bg-gray-50', className)}
+      className={cn('min-h-dvh w-full bg-gray-50 px-16', className)}
     >
       {header}
       <Header.Spacing />
-      <Col className={cn('px-16', innerClassName)}>{children}</Col>
+      {children}
       {bottomFixedButton && (
         <Flex
           center
