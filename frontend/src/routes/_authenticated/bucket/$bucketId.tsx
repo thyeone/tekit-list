@@ -3,7 +3,7 @@ import { emojiQueries } from '@/apis/emoji/queries'
 import { createFileRoute } from '@tanstack/react-router'
 import { BucketForm } from './components/BucketForm'
 
-export const Route = createFileRoute('/bucket/$bucketId')({
+export const Route = createFileRoute('/_authenticated/bucket/$bucketId')({
   component: BucketDetail,
   loader: async ({ context, params }) => {
     const { bucketId } = params

@@ -1,10 +1,18 @@
 import { Api } from 'api'
+import BrowserCookies from 'js-cookie'
 
-function customFetch(
+async function customFetch(
   input: RequestInfo | URL,
   init?: RequestInit,
 ): Promise<Response> {
-  return fetch(input, init)
+  // if (typeof window !== 'undefined') {
+  //   const response = await fetch(input, init)
+  //   const accessToken = BrowserCookies.get('accessToken')
+
+  //   if (response.status === 401) {
+  //   }
+  // }
+  return await fetch(input, init)
 }
 
 type ApiInstance<T = unknown> = Omit<
@@ -34,17 +42,17 @@ export function api<T>(): ApiInstance<T> {
       const response = await customFetch(input, init)
       return response
     },
-    // securityWorker: async () => {
-    //   const accessToken = await getToken('accessToken')
-    //   if (accessToken) {
-    //     return {
-    //       headers: {
-    //         Authorization: `Bearer ${accessToken}`,
-    //       },
-    //     }
-    //   }
-    //   return {}
-    // },
+    securityWorker: async () => {
+      const accessToken = BrowserCookies.get('accessToken')
+      if (accessToken) {
+        return {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      }
+      return {}
+    },
   })
 
   instance = __instance

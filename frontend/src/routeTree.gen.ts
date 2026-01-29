@@ -9,26 +9,21 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as BucketCreateRouteImport } from './routes/bucket/create'
-import { Route as BucketBucketIdRouteImport } from './routes/bucket/$bucketId'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
+import { Route as AuthenticatedBucketCreateRouteImport } from './routes/_authenticated/bucket/create'
+import { Route as AuthenticatedBucketBucketIdRouteImport } from './routes/_authenticated/bucket/$bucketId'
 
-const IndexRoute = IndexRouteImport.update({
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BucketCreateRoute = BucketCreateRouteImport.update({
-  id: '/bucket/create',
-  path: '/bucket/create',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BucketBucketIdRoute = BucketBucketIdRouteImport.update({
-  id: '/bucket/$bucketId',
-  path: '/bucket/$bucketId',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthLoginRoute = AuthLoginRouteImport.update({
   id: '/auth/login',
@@ -40,28 +35,41 @@ const AuthCallbackRoute = AuthCallbackRouteImport.update({
   path: '/auth/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedBucketCreateRoute =
+  AuthenticatedBucketCreateRouteImport.update({
+    id: '/bucket/create',
+    path: '/bucket/create',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedBucketBucketIdRoute =
+  AuthenticatedBucketBucketIdRouteImport.update({
+    id: '/bucket/$bucketId',
+    path: '/bucket/$bucketId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof AuthenticatedIndexRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/login': typeof AuthLoginRoute
-  '/bucket/$bucketId': typeof BucketBucketIdRoute
-  '/bucket/create': typeof BucketCreateRoute
+  '/bucket/$bucketId': typeof AuthenticatedBucketBucketIdRoute
+  '/bucket/create': typeof AuthenticatedBucketCreateRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/login': typeof AuthLoginRoute
-  '/bucket/$bucketId': typeof BucketBucketIdRoute
-  '/bucket/create': typeof BucketCreateRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/bucket/$bucketId': typeof AuthenticatedBucketBucketIdRoute
+  '/bucket/create': typeof AuthenticatedBucketCreateRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/login': typeof AuthLoginRoute
-  '/bucket/$bucketId': typeof BucketBucketIdRoute
-  '/bucket/create': typeof BucketCreateRoute
+  '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/bucket/$bucketId': typeof AuthenticatedBucketBucketIdRoute
+  '/_authenticated/bucket/create': typeof AuthenticatedBucketCreateRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -73,50 +81,42 @@ export interface FileRouteTypes {
     | '/bucket/create'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/auth/callback'
     | '/auth/login'
+    | '/'
     | '/bucket/$bucketId'
     | '/bucket/create'
   id:
     | '__root__'
-    | '/'
+    | '/_authenticated'
     | '/auth/callback'
     | '/auth/login'
-    | '/bucket/$bucketId'
-    | '/bucket/create'
+    | '/_authenticated/'
+    | '/_authenticated/bucket/$bucketId'
+    | '/_authenticated/bucket/create'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AuthCallbackRoute: typeof AuthCallbackRoute
   AuthLoginRoute: typeof AuthLoginRoute
-  BucketBucketIdRoute: typeof BucketBucketIdRoute
-  BucketCreateRoute: typeof BucketCreateRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/': {
+      id: '/_authenticated/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/bucket/create': {
-      id: '/bucket/create'
-      path: '/bucket/create'
-      fullPath: '/bucket/create'
-      preLoaderRoute: typeof BucketCreateRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/bucket/$bucketId': {
-      id: '/bucket/$bucketId'
-      path: '/bucket/$bucketId'
-      fullPath: '/bucket/$bucketId'
-      preLoaderRoute: typeof BucketBucketIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/auth/login': {
       id: '/auth/login'
@@ -132,15 +132,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/bucket/create': {
+      id: '/_authenticated/bucket/create'
+      path: '/bucket/create'
+      fullPath: '/bucket/create'
+      preLoaderRoute: typeof AuthenticatedBucketCreateRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/bucket/$bucketId': {
+      id: '/_authenticated/bucket/$bucketId'
+      path: '/bucket/$bucketId'
+      fullPath: '/bucket/$bucketId'
+      preLoaderRoute: typeof AuthenticatedBucketBucketIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedBucketBucketIdRoute: typeof AuthenticatedBucketBucketIdRoute
+  AuthenticatedBucketCreateRoute: typeof AuthenticatedBucketCreateRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedBucketBucketIdRoute: AuthenticatedBucketBucketIdRoute,
+  AuthenticatedBucketCreateRoute: AuthenticatedBucketCreateRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthCallbackRoute: AuthCallbackRoute,
   AuthLoginRoute: AuthLoginRoute,
-  BucketBucketIdRoute: BucketBucketIdRoute,
-  BucketCreateRoute: BucketCreateRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

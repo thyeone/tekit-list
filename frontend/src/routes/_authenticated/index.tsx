@@ -19,7 +19,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import type { OrderByEnum, StatusEnum } from 'api'
 import { useCallback, useMemo } from 'react'
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute('/_authenticated/')({
   component: Index,
 })
 
