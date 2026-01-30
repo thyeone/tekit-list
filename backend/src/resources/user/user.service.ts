@@ -1,6 +1,8 @@
+import { IUser } from '@/Interfaces/user';
 import { OAuthProvider } from '@/modules/auth/auth.type';
-import { EntityManager } from '@mikro-orm/core';
+import { EntityManager, wrap } from '@mikro-orm/core';
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { FileAsset } from '../assets/assets.entity';
 import { User } from './user.entity';
 
 @Injectable()
@@ -11,28 +13,17 @@ export class UserService {
     return this.em.findOne(User, { provider, providerId });
   }
 
-  async createUser(data: {
-    provider: OAuthProvider;
-    providerId: string;
-    email?: string;
-    nickname?: string;
-    profileImage?: string;
-  }): Promise<User> {
+  async createUser(data: { provider: OAuthProvider; providerId: string }): Promise<User> {
     const user = this.em.create(User, data);
-    await this.em.persistAndFlush(user);
+    await this.em.flush();
     return user;
   }
 
-  async findOrCreate(data: {
-    provider: OAuthProvider;
-    providerId: string;
-    nickname?: string;
-    profileImage?: string;
-  }): Promise<User> {
-    let user = await this.findByProviderId(data.provider, data.providerId);
+  async findOrCreate(create: IUser.Create): Promise<User> {
+    let user = await this.findByProviderId(create.provider, create.providerId);
 
     if (!user) {
-      user = await this.createUser(data);
+      user = await this.createUser(create);
     }
 
     return user;
@@ -47,10 +38,27 @@ export class UserService {
   }
 
   async findById(id: number): Promise<User> {
-    const user = await this.em.findOne(User, { id });
+    const user = await this.em.findOne(User, { id }, { populate: ['profileImage'] });
     if (!user) {
       throw new NotFoundException('User not found');
     }
     return user;
+  }
+
+  async updateProfileImage(userId: number, update: IUser.Update): Promise<void> {
+    const user = await this.em.findOne(User, { id: userId });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    wrap(user).assign({
+      profileImage: update.profileImageId
+        ? await this.em.findOne(FileAsset, { id: Number(update.profileImageId) })
+        : null,
+      nickname: update.nickname,
+    });
+
+    await this.em.flush();
   }
 }

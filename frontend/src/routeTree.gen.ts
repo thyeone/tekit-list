@@ -13,6 +13,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
+import { Route as AuthenticatedMyRouteImport } from './routes/_authenticated/my'
 import { Route as AuthenticatedBucketCreateRouteImport } from './routes/_authenticated/bucket/create'
 import { Route as AuthenticatedBucketBucketIdRouteImport } from './routes/_authenticated/bucket/$bucketId'
 
@@ -35,6 +36,11 @@ const AuthCallbackRoute = AuthCallbackRouteImport.update({
   path: '/auth/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedMyRoute = AuthenticatedMyRouteImport.update({
+  id: '/my',
+  path: '/my',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedBucketCreateRoute =
   AuthenticatedBucketCreateRouteImport.update({
     id: '/bucket/create',
@@ -50,12 +56,14 @@ const AuthenticatedBucketBucketIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
+  '/my': typeof AuthenticatedMyRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/login': typeof AuthLoginRoute
   '/bucket/$bucketId': typeof AuthenticatedBucketBucketIdRoute
   '/bucket/create': typeof AuthenticatedBucketCreateRoute
 }
 export interface FileRoutesByTo {
+  '/my': typeof AuthenticatedMyRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/login': typeof AuthLoginRoute
   '/': typeof AuthenticatedIndexRoute
@@ -65,6 +73,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/_authenticated/my': typeof AuthenticatedMyRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/login': typeof AuthLoginRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
@@ -75,12 +84,14 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/my'
     | '/auth/callback'
     | '/auth/login'
     | '/bucket/$bucketId'
     | '/bucket/create'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/my'
     | '/auth/callback'
     | '/auth/login'
     | '/'
@@ -89,6 +100,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_authenticated'
+    | '/_authenticated/my'
     | '/auth/callback'
     | '/auth/login'
     | '/_authenticated/'
@@ -132,6 +144,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/my': {
+      id: '/_authenticated/my'
+      path: '/my'
+      fullPath: '/my'
+      preLoaderRoute: typeof AuthenticatedMyRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/bucket/create': {
       id: '/_authenticated/bucket/create'
       path: '/bucket/create'
@@ -150,12 +169,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedMyRoute: typeof AuthenticatedMyRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedBucketBucketIdRoute: typeof AuthenticatedBucketBucketIdRoute
   AuthenticatedBucketCreateRoute: typeof AuthenticatedBucketCreateRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedMyRoute: AuthenticatedMyRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedBucketBucketIdRoute: AuthenticatedBucketBucketIdRoute,
   AuthenticatedBucketCreateRoute: AuthenticatedBucketCreateRoute,

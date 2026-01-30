@@ -25,6 +25,7 @@ export function Button<C extends React.ElementType = 'button'>({
         'w-full rounded-[12px] bg-primary px-24 py-10 font-semibold text-lg text-white transition-all hover:opacity-90 active:scale-95 disabled:opacity-50',
         {
           'mx-auto w-fit': size === 'sm',
+          'w-full': size === 'lg',
           'bg-grey-100 text-grey-900': variant === 'secondary',
           'bg-red-500 text-white': variant === 'warning',
           'bg-[#FEE500] text-[#000000] hover:bg-[#FDD835]': variant === 'kakao',

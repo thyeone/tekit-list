@@ -53,7 +53,6 @@ export class AuthService {
       user = await this.userService.createUser({
         provider: userInfo.provider,
         providerId: String(userInfo.id),
-        nickname: userInfo.name,
       });
     }
 

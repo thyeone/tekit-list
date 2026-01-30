@@ -41,7 +41,7 @@ Header.Center = ({ children, ...rest }: FlexProps) => {
 
 Header.Right = ({ children, ...rest }: FlexProps) => {
   return (
-    <Flex className={cn('ml-auto')} {...rest}>
+    <Flex align="center" className={cn('ml-auto')} {...rest}>
       {children}
     </Flex>
   )

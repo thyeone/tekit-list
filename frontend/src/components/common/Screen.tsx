@@ -34,7 +34,7 @@ export function Screen({
           center
           className="pointer-events-none fixed inset-x-0 bottom-0 z-50 mx-auto max-w-mobile pt-10 pb-20"
         >
-          <Box className="pointer-events-auto">{bottomFixedButton}</Box>
+          <Box className="pointer-events-auto w-full">{bottomFixedButton}</Box>
         </Flex>
       )}
       {bottomSpacing && <Spacing size={bottomSpacing} />}

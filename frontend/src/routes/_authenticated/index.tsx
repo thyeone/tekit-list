@@ -6,7 +6,7 @@ import { Button } from '@/components/common/Button'
 import { Header } from '@/components/common/Header'
 import { Screen } from '@/components/common/Screen'
 import { Select } from '@/components/common/Select'
-import { Icon } from '@/headless/icon/Icon'
+import { Icon, IconButton } from '@/headless/icon/Icon'
 import { toast } from '@/headless/Toaster'
 import { Box } from '@/headless/ui/Box'
 import { Col, Flex, Row } from '@/headless/ui/Flex'
@@ -14,7 +14,6 @@ import { List } from '@/headless/ui/List'
 import { Spacing } from '@/headless/ui/Spacing'
 import { useQueryParams } from '@/hooks/use-query-params-react'
 import { useInfiniteList } from '@/hooks/useInfiniteList'
-import { useUser } from '@/providers/user.provider'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import type { OrderByEnum, StatusEnum } from 'api'
@@ -55,15 +54,14 @@ export default function Index() {
     )
   }, [count])
 
-  const { sync } = useUser()
-
-  // const { data: user } = useQuery(userQueries.me())
-
   return (
     <Screen
       header={
         <Header>
           <Header.Center>버킷리스트</Header.Center>
+          <Header.Right>
+            <IconButton component={Link} to="/my" name="User" size={24} />
+          </Header.Right>
         </Header>
       }
       bottomFixedButton={

@@ -1,6 +1,7 @@
 import { IUser } from '@/Interfaces/user';
 import { OAuthProvider } from '@/modules/auth/auth.type';
-import { Entity, Enum, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, Enum, ManyToOne, Opt, PrimaryKey, Property } from '@mikro-orm/core';
+import { FileAsset } from '../assets/assets.entity';
 
 @Entity()
 export class User {
@@ -28,8 +29,8 @@ export class User {
   @Property({ nullable: true })
   nickname?: string;
 
-  @Property({ nullable: true })
-  profileImage?: string | null;
+  @ManyToOne(() => FileAsset, { nullable: true })
+  profileImage?: FileAsset | null;
 
   @Property({ nullable: true })
   refreshToken?: string;
@@ -38,7 +39,7 @@ export class User {
     return {
       id: user.id,
       nickname: user.nickname || '',
-      profileImage: user.profileImage || null,
+      profileImage: user.profileImage ? FileAsset.buildRO(user.profileImage) : null,
     };
   }
 }

@@ -1,7 +1,7 @@
 import { AuthGuard } from '@/guards/auth.guard';
-import { IUser } from '@/Interfaces/user';
+import type { IUser } from '@/Interfaces/user';
 import { UserId } from '@/modules/auth/decorators/auth.decorator';
-import { TypedRoute } from '@nestia/core';
+import { TypedBody, TypedRoute } from '@nestia/core';
 import { Controller, NotFoundException, UseGuards } from '@nestjs/common';
 import { User } from './user.entity';
 import { UserService } from './user.service';
@@ -28,5 +28,19 @@ export class UserController {
     }
 
     return User.buildRO(user);
+  }
+
+  /**
+   * 현재 로그인한 사용자 정보 수정
+   *
+   * @summary 내 정보 수정
+   * @tag User
+   * @security bearer
+   * @operationId updateProfile
+   */
+  @UseGuards(AuthGuard)
+  @TypedRoute.Patch()
+  async updateMe(@UserId() userId: number, @TypedBody() update: IUser.Update): Promise<void> {
+    await this.userService.updateProfileImage(userId, update);
   }
 }
