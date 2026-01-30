@@ -28,7 +28,6 @@ function Callback() {
     const token = JSON.parse(authResponse) as TokenResponse
 
     if (token) {
-      console.log(token, 'token')
       BrowserCookies.set('accessToken', token.accessToken, {
         expires: new Date(Date.now() + token.accessTokenExpiresInMilliseconds),
       })

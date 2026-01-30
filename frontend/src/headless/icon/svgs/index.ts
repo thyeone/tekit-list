@@ -1,8 +1,12 @@
-export { Calendar } from './Calendar';
-export { Alert } from './Alert';
-export { Close } from './Close'
+export { Alert } from './Alert'
+export { Calendar } from './Calendar'
 export { Check } from './Check'
-export { ChevronLeft } from './ChevronLeft'
 export { ChevronDown } from './ChevronDown'
+export { ChevronLeft } from './ChevronLeft'
+export { Close } from './Close'
 export { Refresh } from './Refresh'
+export { Upload } from './Upload'
 export { User } from './User'
+export { Trash } from './Trash'
+export { Image } from './Image'
+export { Logout } from './Logout'

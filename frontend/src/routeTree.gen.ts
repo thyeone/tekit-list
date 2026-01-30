@@ -13,7 +13,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
-import { Route as AuthenticatedMyRouteImport } from './routes/_authenticated/my'
+import { Route as AuthenticatedMyIndexRouteImport } from './routes/_authenticated/my/index'
 import { Route as AuthenticatedBucketCreateRouteImport } from './routes/_authenticated/bucket/create'
 import { Route as AuthenticatedBucketBucketIdRouteImport } from './routes/_authenticated/bucket/$bucketId'
 
@@ -36,9 +36,9 @@ const AuthCallbackRoute = AuthCallbackRouteImport.update({
   path: '/auth/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedMyRoute = AuthenticatedMyRouteImport.update({
-  id: '/my',
-  path: '/my',
+const AuthenticatedMyIndexRoute = AuthenticatedMyIndexRouteImport.update({
+  id: '/my/',
+  path: '/my/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedBucketCreateRoute =
@@ -56,56 +56,56 @@ const AuthenticatedBucketBucketIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
-  '/my': typeof AuthenticatedMyRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/login': typeof AuthLoginRoute
   '/bucket/$bucketId': typeof AuthenticatedBucketBucketIdRoute
   '/bucket/create': typeof AuthenticatedBucketCreateRoute
+  '/my/': typeof AuthenticatedMyIndexRoute
 }
 export interface FileRoutesByTo {
-  '/my': typeof AuthenticatedMyRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/login': typeof AuthLoginRoute
   '/': typeof AuthenticatedIndexRoute
   '/bucket/$bucketId': typeof AuthenticatedBucketBucketIdRoute
   '/bucket/create': typeof AuthenticatedBucketCreateRoute
+  '/my': typeof AuthenticatedMyIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteWithChildren
-  '/_authenticated/my': typeof AuthenticatedMyRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/login': typeof AuthLoginRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/bucket/$bucketId': typeof AuthenticatedBucketBucketIdRoute
   '/_authenticated/bucket/create': typeof AuthenticatedBucketCreateRoute
+  '/_authenticated/my/': typeof AuthenticatedMyIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/my'
     | '/auth/callback'
     | '/auth/login'
     | '/bucket/$bucketId'
     | '/bucket/create'
+    | '/my/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/my'
     | '/auth/callback'
     | '/auth/login'
     | '/'
     | '/bucket/$bucketId'
     | '/bucket/create'
+    | '/my'
   id:
     | '__root__'
     | '/_authenticated'
-    | '/_authenticated/my'
     | '/auth/callback'
     | '/auth/login'
     | '/_authenticated/'
     | '/_authenticated/bucket/$bucketId'
     | '/_authenticated/bucket/create'
+    | '/_authenticated/my/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -144,11 +144,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/my': {
-      id: '/_authenticated/my'
+    '/_authenticated/my/': {
+      id: '/_authenticated/my/'
       path: '/my'
-      fullPath: '/my'
-      preLoaderRoute: typeof AuthenticatedMyRouteImport
+      fullPath: '/my/'
+      preLoaderRoute: typeof AuthenticatedMyIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/bucket/create': {
@@ -169,17 +169,17 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
-  AuthenticatedMyRoute: typeof AuthenticatedMyRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedBucketBucketIdRoute: typeof AuthenticatedBucketBucketIdRoute
   AuthenticatedBucketCreateRoute: typeof AuthenticatedBucketCreateRoute
+  AuthenticatedMyIndexRoute: typeof AuthenticatedMyIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedMyRoute: AuthenticatedMyRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedBucketBucketIdRoute: AuthenticatedBucketBucketIdRoute,
   AuthenticatedBucketCreateRoute: AuthenticatedBucketCreateRoute,
+  AuthenticatedMyIndexRoute: AuthenticatedMyIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

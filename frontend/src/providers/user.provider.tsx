@@ -43,8 +43,6 @@ export function UserProvider({ children }: PropsWithStrictChildren) {
     setUser(undefined)
   }, [])
 
-  console.log(user, 'user')
-
   useEffect(() => {
     sync()
   }, [sync])
