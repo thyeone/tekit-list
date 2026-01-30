@@ -22,13 +22,18 @@ export type KakaoOAuthTokenResponse = {
   scope: string;
 };
 
-export type TokenResponse = {
-  token_type: 'bearer';
-  accessToken: string;
+export type OAuthResponse = {
+  oAuthProvider: OAuthProvider;
+  oAuthId: string | null;
+  refreshToken?: string;
+  accessToken?: string;
   accessTokenExpiresInMilliseconds?: number;
-  id_token?: string;
-  refreshToken: string;
   refreshTokenExpiresInMilliseconds?: number;
+};
+
+export type TokenResponse = {
+  token: string;
+  expiresInMilliseconds: number;
 };
 
 export interface OAuthUserInfo {
@@ -38,12 +43,13 @@ export interface OAuthUserInfo {
 }
 
 export interface TokenPayload {
-  sub: string; // userId (UUID)
-  provider: string;
+  id: number;
+  type: 'access' | 'refresh';
+  provider: OAuthProvider;
   iat?: number;
   exp?: number;
 }
 
 export abstract class OAuthProviderHandler {
-  abstract getToken(code: string): Promise<TokenResponse>;
+  abstract getToken(code: string): Promise<OAuthResponse>;
 }

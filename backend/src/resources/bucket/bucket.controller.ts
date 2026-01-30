@@ -20,13 +20,13 @@ export class BucketController {
    * @returns 버킷 리스트 미완료 개수
    */
   @TypedRoute.Get('count')
-  async findCount(@UserId() userId: string): Promise<IBucket.CountRO> {
+  async findCount(@UserId() userId: number): Promise<IBucket.CountRO> {
     return await this.bucketService.findCount(userId);
   }
 
   @TypedRoute.Get()
   async findAll(
-    @UserId() userId: string,
+    @UserId() userId: number,
     @TypedQuery()
     query: {
       orderBy?: QueryOrder;
@@ -58,7 +58,7 @@ export class BucketController {
    * @returns 버킷 리스트 정보
    */
   @TypedRoute.Get(':id')
-  async findOne(@UserId() userId: string, @TypedParam('id') id: number): Promise<IBucket.RO> {
+  async findOne(@UserId() userId: number, @TypedParam('id') id: number): Promise<IBucket.RO> {
     return await this.bucketService.findOne(userId, id);
   }
 
@@ -72,7 +72,7 @@ export class BucketController {
    * @returns 생성된 버킷 리스트
    */
   @TypedRoute.Post()
-  async create(@UserId() userId: string, @TypedBody() create: IBucket.Create): Promise<IBucket.RO> {
+  async create(@UserId() userId: number, @TypedBody() create: IBucket.Create): Promise<IBucket.RO> {
     return await this.bucketService.create(userId, create);
   }
 
@@ -85,7 +85,7 @@ export class BucketController {
    * @param id 삭제할 버킷 ID
    */
   @TypedRoute.Delete(':id')
-  async remove(@UserId() userId: string, @TypedParam('id') id: number): Promise<void> {
+  async remove(@UserId() userId: number, @TypedParam('id') id: number): Promise<void> {
     return await this.bucketService.remove(userId, id);
   }
 
@@ -101,7 +101,7 @@ export class BucketController {
    */
   @TypedRoute.Put(':id')
   async update(
-    @UserId() userId: string,
+    @UserId() userId: number,
     @TypedParam('id') id: number,
     @TypedBody() update: IBucket.Create,
   ): Promise<IBucket.RO> {
@@ -117,7 +117,7 @@ export class BucketController {
    * @param id 완료 상태를 업데이트할 버킷 ID
    */
   @TypedRoute.Patch(':id/complete')
-  async updateCompleteBucket(@UserId() userId: string, @TypedParam('id') id: number): Promise<void> {
+  async updateCompleteBucket(@UserId() userId: number, @TypedParam('id') id: number): Promise<void> {
     return await this.bucketService.updateCompleteBucket(userId, id);
   }
 }

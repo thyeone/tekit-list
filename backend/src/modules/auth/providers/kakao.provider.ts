@@ -8,8 +8,8 @@ import {
   KakaoUserInfo,
   OAuthProvider,
   OAuthProviderHandler,
+  OAuthResponse,
   OAuthUserInfo,
-  TokenResponse,
 } from '../auth.type';
 
 @Injectable()
@@ -21,7 +21,7 @@ export class KakaoProvider extends OAuthProviderHandler {
     super();
   }
 
-  async getToken(code: string): Promise<TokenResponse> {
+  async getToken(code: string): Promise<OAuthResponse> {
     if (!code) {
       throw new BadRequestException('code 항목이 필요합니다.');
     }
@@ -49,7 +49,8 @@ export class KakaoProvider extends OAuthProviderHandler {
       );
 
       return {
-        token_type: 'bearer',
+        oAuthProvider: OAuthProvider.KAKAO,
+        oAuthId: result.data.access_token,
         accessToken: result.data.access_token,
         accessTokenExpiresInMilliseconds: result.data.expires_in,
         refreshToken: result.data.refresh_token,

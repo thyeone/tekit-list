@@ -1,7 +1,7 @@
-import { createSafeContext } from '@/headless//create-safe-context'
 import { Box, type BoxProps } from '@/headless/ui/Box'
 import { Flex, type FlexProps } from '@/headless/ui/Flex'
 import { cn } from '@/utils/cn'
+import { createSafeContext } from '@/utils/create-safe-context'
 
 type TableHeader = { title: string; width: number }
 

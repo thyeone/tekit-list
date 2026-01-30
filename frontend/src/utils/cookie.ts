@@ -1,3 +1,10 @@
+import BrowserCookies from 'js-cookie'
+
+export const TOKEN_KEYS = {
+  ACCESS_TOKEN: 'accessToken',
+  REFRESH_TOKEN: 'refreshToken',
+} as const
+
 export const getBrowserCookies = () => {
   const cookies: { [key: string]: string } = document.cookie
     .split(';')
@@ -9,4 +16,9 @@ export const getBrowserCookies = () => {
     }, {})
 
   return cookies
+}
+
+export const deleteToken = () => {
+  BrowserCookies.remove(TOKEN_KEYS.ACCESS_TOKEN)
+  BrowserCookies.remove(TOKEN_KEYS.REFRESH_TOKEN)
 }

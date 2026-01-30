@@ -1,7 +1,7 @@
 export namespace IUser {
   export interface RO {
-    id: string;
+    id: number;
     nickname?: string;
-    profileImage?: string;
+    profileImage: string | null;
   }
 }

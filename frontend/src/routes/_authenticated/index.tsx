@@ -14,6 +14,7 @@ import { List } from '@/headless/ui/List'
 import { Spacing } from '@/headless/ui/Spacing'
 import { useQueryParams } from '@/hooks/use-query-params-react'
 import { useInfiniteList } from '@/hooks/useInfiniteList'
+import { useUser } from '@/providers/user.provider'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import type { OrderByEnum, StatusEnum } from 'api'
@@ -53,6 +54,10 @@ export default function Index() {
       ((count?.uncompletedCount ?? 0) / (count?.totalCount ?? 0)) * 100,
     )
   }, [count])
+
+  const { sync } = useUser()
+
+  // const { data: user } = useQuery(userQueries.me())
 
   return (
     <Screen

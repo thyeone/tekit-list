@@ -1,11 +1,17 @@
+import { useUser } from '@/providers/user.provider'
 import { getBrowserCookies } from '@/utils/cookie'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
+import type { ProviderEnum } from 'api'
 import BrowserCookies from 'js-cookie'
 import { useEffect, useEffectEvent } from 'react'
 
 type TokenResponse = {
+  oAuthProvider: ProviderEnum
+  oAuthId: string
   accessToken: string
+  accessTokenExpiresInMilliseconds: number
   refreshToken: string
+  refreshTokenExpiresInMilliseconds: number
 }
 
 export const Route = createFileRoute('/auth/callback')({
@@ -14,23 +20,24 @@ export const Route = createFileRoute('/auth/callback')({
 
 function Callback() {
   const router = useRouter()
+  const user = useUser()
 
   const handleLogin = useEffectEvent(async () => {
-    const token = getBrowserCookies()['auth-response']
+    const authResponse = getBrowserCookies()['auth-response']
 
-    const tokens = JSON.parse(token) as TokenResponse
+    const token = JSON.parse(authResponse) as TokenResponse
 
-    console.log(tokens)
-
-    if (tokens) {
-      BrowserCookies.set('accessToken', tokens.accessToken, {
-        expires: 7,
-        path: '/',
+    if (token) {
+      console.log(token, 'token')
+      BrowserCookies.set('accessToken', token.accessToken, {
+        expires: new Date(Date.now() + token.accessTokenExpiresInMilliseconds),
       })
-      BrowserCookies.set('refreshToken', tokens.refreshToken, {
-        expires: 7,
-        path: '/',
+      BrowserCookies.set('refreshToken', token.refreshToken, {
+        expires: new Date(Date.now() + token.refreshTokenExpiresInMilliseconds),
       })
+
+      user.sync()
+
       router.navigate({ to: '/', replace: true })
     } else {
       router.history.back()

@@ -7,7 +7,7 @@ export const Auth = createParamDecorator((data: unknown, ctx: ExecutionContext):
 });
 
 // userId만 가져오는 헬퍼 데코레이터
-export const UserId = createParamDecorator((data: unknown, ctx: ExecutionContext): string => {
+export const UserId = createParamDecorator((data: unknown, ctx: ExecutionContext): number => {
   const request = ctx.switchToHttp().getRequest<{ user: TokenPayload }>();
-  return request.user?.sub;
+  return request.user?.id;
 });

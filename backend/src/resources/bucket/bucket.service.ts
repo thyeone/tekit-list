@@ -11,7 +11,7 @@ export class BucketService {
   constructor(private readonly em: EntityManager) {}
 
   async findAll(
-    userId: string,
+    userId: number,
     orderBy: { createdAt: QueryOrder },
     status?: 'ALL' | 'COMPLETED' | 'INCOMPLETED',
     cursor?: number,
@@ -50,7 +50,7 @@ export class BucketService {
     });
   }
 
-  async findOne(userId: string, id: number): Promise<IBucket.RO> {
+  async findOne(userId: number, id: number): Promise<IBucket.RO> {
     const bucket = await this.em.findOne(Bucket, { id, user: { id: userId } }, { populate: ['emoji'] });
 
     if (!bucket) {
@@ -60,7 +60,7 @@ export class BucketService {
     return Bucket.buildRO(bucket);
   }
 
-  async findCount(userId: string): Promise<IBucket.CountRO> {
+  async findCount(userId: number): Promise<IBucket.CountRO> {
     const totalCount = await this.em.count(Bucket, { user: { id: userId } });
     const uncompletedCount = await this.em.count(Bucket, {
       user: { id: userId },
@@ -78,7 +78,7 @@ export class BucketService {
     };
   }
 
-  async create(userId: string, create: IBucket.Create): Promise<IBucket.RO> {
+  async create(userId: number, create: IBucket.Create): Promise<IBucket.RO> {
     const user = await this.em.findOne(User, { id: userId });
     if (!user) {
       throw new NotFoundException('User not found');
@@ -99,7 +99,7 @@ export class BucketService {
     return Bucket.buildRO(bucket);
   }
 
-  async remove(userId: string, id: number): Promise<void> {
+  async remove(userId: number, id: number): Promise<void> {
     const bucket = await this.em.findOne(Bucket, { id, user: { id: userId } });
 
     if (!bucket) {
@@ -109,7 +109,7 @@ export class BucketService {
     await this.em.remove(bucket).flush();
   }
 
-  async updateCompleteBucket(userId: string, id: number): Promise<void> {
+  async updateCompleteBucket(userId: number, id: number): Promise<void> {
     const bucket = await this.em.findOne(Bucket, { id, user: { id: userId } });
 
     if (!bucket) {
@@ -120,7 +120,7 @@ export class BucketService {
     await this.em.flush();
   }
 
-  async update(userId: string, id: number, update: IBucket.Create): Promise<IBucket.RO> {
+  async update(userId: number, id: number, update: IBucket.Create): Promise<IBucket.RO> {
     const bucket = await this.em.findOne(Bucket, { id, user: { id: userId } }, { populate: ['emoji'] });
 
     if (!bucket) {

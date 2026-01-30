@@ -6,7 +6,7 @@ export const Route = createFileRoute('/_authenticated')({
     const accessToken = BrowserCookies.get('accessToken')
     const refreshToken = BrowserCookies.get('refreshToken')
 
-    if (!accessToken || !refreshToken) {
+    if (!accessToken && !refreshToken) {
       throw redirect({
         to: '/auth/login',
       })

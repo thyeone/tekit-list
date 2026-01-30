@@ -3,15 +3,13 @@ import { Screen } from '@/components/common/Screen'
 import { CONFIG } from '@/constants/config'
 import { Col, Flex } from '@/headless/ui/Flex'
 import { Spacing } from '@/headless/ui/Spacing'
-import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/auth/login')({
   component: Login,
 })
 
 function Login() {
-  const router = useRouter()
-
   return (
     <Screen className="bg-linear-to-b from-brand-50 to-white">
       <Col flex={1} className="h-full py-32">

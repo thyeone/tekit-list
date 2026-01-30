@@ -1,6 +1,6 @@
 import { OAuthProvider } from '@/modules/auth/auth.type';
 import { EntityManager } from '@mikro-orm/core';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from './user.entity';
 
 @Injectable()
@@ -38,7 +38,7 @@ export class UserService {
     return user;
   }
 
-  async updateRefreshToken(userId: string, refreshToken: string | null): Promise<void> {
+  async updateRefreshToken(userId: number, refreshToken: string | null): Promise<void> {
     const user = await this.em.findOne(User, { id: userId });
     if (user) {
       user.refreshToken = refreshToken || undefined;
@@ -46,7 +46,11 @@ export class UserService {
     }
   }
 
-  async findById(id: string): Promise<User | null> {
-    return this.em.findOne(User, { id });
+  async findById(id: number): Promise<User> {
+    const user = await this.em.findOne(User, { id });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
   }
 }

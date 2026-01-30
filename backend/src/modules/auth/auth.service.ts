@@ -1,10 +1,19 @@
 import { AppConfig } from '@/config/app.config';
+import { User } from '@/resources/user/user.entity';
 import { UserService } from '@/resources/user/user.service';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { CookieOptions, Response } from 'express';
-import { OAuthProvider, OAuthProviderHandler, OAuthUserInfo, TokenResponse } from './auth.type';
+import ms from 'ms';
+import {
+  OAuthProvider,
+  OAuthProviderHandler,
+  OAuthResponse,
+  OAuthUserInfo,
+  TokenPayload,
+  TokenResponse,
+} from './auth.type';
 import { KakaoProvider } from './providers/kakao.provider';
 
 @Injectable()
@@ -16,6 +25,10 @@ export class AuthService {
     private readonly userService: UserService,
   ) {}
 
+  private get jwtExpiresIn() {
+    return this.configService.get('jwt', { infer: true })!;
+  }
+
   private get cookieOptions(): CookieOptions {
     return {
       sameSite: 'lax',
@@ -25,11 +38,11 @@ export class AuthService {
     };
   }
 
-  async getOAuthToken(provider: OAuthProvider, code: string): Promise<TokenResponse> {
+  async getOAuthToken(provider: OAuthProvider, code: string): Promise<OAuthResponse> {
     return await this.getOAuthProvider(provider).getToken(code);
   }
 
-  async generateToken(userInfo: OAuthUserInfo): Promise<TokenResponse> {
+  async createOAuthToken(userInfo: OAuthUserInfo): Promise<OAuthResponse> {
     if (!userInfo) {
       throw new BadRequestException('사용자 정보를 가져올 수 없습니다.');
     }
@@ -44,25 +57,44 @@ export class AuthService {
       });
     }
 
-    const payload = {
-      sub: user.id,
-      provider: userInfo.provider,
-    };
-
-    const accessToken = await this.jwtService.signAsync(payload, {
-      expiresIn: '1h',
+    const accessToken = await this.createToken({
+      user,
+      type: 'access',
     });
 
-    const refreshToken = await this.jwtService.signAsync(payload, {
-      expiresIn: '7d',
+    const refreshToken = await this.createToken({
+      user,
+      type: 'refresh',
     });
-
-    await this.userService.updateRefreshToken(user.id, refreshToken);
 
     return {
-      token_type: 'bearer',
-      accessToken,
-      refreshToken,
+      oAuthProvider: user.provider,
+      oAuthId: user.providerId,
+      accessToken: accessToken.token,
+      accessTokenExpiresInMilliseconds: accessToken.expiresInMilliseconds,
+      refreshToken: refreshToken.token,
+      refreshTokenExpiresInMilliseconds: refreshToken.expiresInMilliseconds,
+    };
+  }
+
+  async createToken({ user, type }: { user: User; type: 'access' | 'refresh' }): Promise<TokenResponse> {
+    const expiresIn = ms(this.jwtExpiresIn[`${type}ExpiresIn`] as ms.StringValue);
+
+    const payload: TokenPayload = {
+      id: user.id,
+      type,
+      provider: user.provider,
+    };
+
+    console.log(payload, 'payload');
+
+    const token = await this.jwtService.signAsync<TokenPayload>(payload, {
+      expiresIn,
+    });
+
+    return {
+      token,
+      expiresInMilliseconds: expiresIn,
     };
   }
 
@@ -76,10 +108,24 @@ export class AuthService {
     }
   }
 
-  createTokenResponse(res: Response, tokens: TokenResponse): void {
+  createTokenResponse(res: Response, tokens: OAuthResponse): void {
     res.cookie('auth-response', JSON.stringify(tokens), this.cookieOptions);
 
     res.redirect(302, this.configService.get('oauth.redirectUri', { infer: true })!);
+  }
+
+  async getAccessTokenFromRefreshToken(refreshToken: string): Promise<TokenResponse> {
+    // "Bearer " prefix가 있다면 제거 (방어적 처리)
+    const token = refreshToken.replace(/^Bearer\s+/i, '');
+
+    const payload = await this.jwtService.verifyAsync<TokenPayload>(token);
+
+    const user = await this.userService.findById(payload.id);
+    if (!user || !user.refreshToken) {
+      throw new UnauthorizedException('유효하지 않은 토큰입니다.');
+    }
+
+    return await this.createToken({ type: 'access', user });
   }
 
   private getOAuthProvider(provider: OAuthProvider): OAuthProviderHandler {

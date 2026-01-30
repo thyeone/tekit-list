@@ -1,12 +1,11 @@
 import { IUser } from '@/Interfaces/user';
 import { OAuthProvider } from '@/modules/auth/auth.type';
 import { Entity, Enum, Opt, PrimaryKey, Property } from '@mikro-orm/core';
-import { v4 } from 'uuid';
 
 @Entity()
 export class User {
   @PrimaryKey()
-  id = v4();
+  id!: number;
 
   @Property({
     type: 'datetime',
@@ -24,13 +23,13 @@ export class User {
   provider!: OAuthProvider;
 
   @Property({ unique: true })
-  providerId!: string; // 카카오 사용자 ID
+  providerId!: string;
 
   @Property({ nullable: true })
   nickname?: string;
 
   @Property({ nullable: true })
-  profileImage?: string;
+  profileImage?: string | null;
 
   @Property({ nullable: true })
   refreshToken?: string;
@@ -38,8 +37,8 @@ export class User {
   static buildRO(user: User): IUser.RO {
     return {
       id: user.id,
-      nickname: user.nickname,
-      profileImage: user.profileImage,
+      nickname: user.nickname || '',
+      profileImage: user.profileImage || null,
     };
   }
 }
