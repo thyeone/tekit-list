@@ -30,7 +30,7 @@ export class User {
   nickname?: string;
 
   @ManyToOne(() => FileAsset, { nullable: true })
-  profileImage?: FileAsset | null;
+  profileImage: FileAsset | null = null;
 
   @Property({ nullable: true })
   refreshToken?: string;
