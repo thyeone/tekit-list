@@ -43,8 +43,10 @@ type BucketFormProps = {
 export function BucketForm({ bucket, emoji }: BucketFormProps) {
   const router = useRouter()
 
-  const { mutate: createMutate } = bucketMutations.create()
-  const { mutate: updateMutate } = bucketMutations.update()
+  const { mutate: createMutate, isPending: isCreatePending } =
+    bucketMutations.create()
+  const { mutate: updateMutate, isPending: isUpdatePending } =
+    bucketMutations.update()
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -199,7 +201,9 @@ export function BucketForm({ bucket, emoji }: BucketFormProps) {
           >
             {bucket ? '삭제' : '취소'}
           </Button>
-          <Button type="submit">{bucket ? '수정하기' : '등록하기'}</Button>
+          <Button type="submit" isLoading={isCreatePending || isUpdatePending}>
+            {bucket ? '수정하기' : '등록하기'}
+          </Button>
         </Flex>
       </Col>
     </Screen>

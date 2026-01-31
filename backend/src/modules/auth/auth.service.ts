@@ -66,6 +66,8 @@ export class AuthService {
       type: 'refresh',
     });
 
+    await this.userService.updateRefreshToken(user.id, refreshToken.token);
+
     return {
       oAuthProvider: user.provider,
       oAuthId: user.providerId,
@@ -114,12 +116,12 @@ export class AuthService {
   }
 
   async getAccessTokenFromRefreshToken(refreshToken: string): Promise<TokenResponse> {
-    // "Bearer " prefix가 있다면 제거 (방어적 처리)
     const token = refreshToken.replace(/^Bearer\s+/i, '');
 
     const payload = await this.jwtService.verifyAsync<TokenPayload>(token);
 
     const user = await this.userService.findById(payload.id);
+
     if (!user || !user.refreshToken) {
       throw new UnauthorizedException('유효하지 않은 토큰입니다.');
     }

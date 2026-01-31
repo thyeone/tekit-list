@@ -1,7 +1,7 @@
 import { Slot } from '@radix-ui/react-slot'
 import { cva } from 'class-variance-authority'
 import React, { forwardRef } from 'react'
-import type { PolymorphicComponentProps, PolymorphicRef } from '../polymorphics'
+import type { PolymorphicRef } from '../polymorphics'
 
 const flexVariants = cva('flex', {
   variants: {
@@ -33,17 +33,18 @@ const flexVariants = cva('flex', {
 })
 
 export type FlexProps<C extends React.ElementType = 'div'> =
-  PolymorphicComponentProps<C> & {
-    component?: C
-    asChild?: boolean
-    gap?: number
-    direction?: 'row' | 'col'
-    center?: boolean
-    align?: 'start' | 'center' | 'end'
-    justify?: 'start' | 'center' | 'end' | 'between'
-    wrap?: boolean
-    flex?: number
-  }
+  React.ComponentPropsWithoutRef<C> &
+    AsProp<C> & {
+      component?: C
+      asChild?: boolean
+      gap?: number
+      direction?: 'row' | 'col'
+      center?: boolean
+      align?: 'start' | 'center' | 'end'
+      justify?: 'start' | 'center' | 'end' | 'between'
+      wrap?: boolean
+      flex?: number
+    }
 
 const FlexComponent = <C extends React.ElementType = 'div'>(
   {

@@ -34,7 +34,7 @@ export default function Index() {
 
   const { data: count } = useQuery(bucketQueries.count())
 
-  const { rows, listBottom, total } = useInfiniteList({
+  const { rows, listBottom } = useInfiniteList({
     key: bucketKeys.list.__list,
     fn: api().bucket.bucketList,
     params: {

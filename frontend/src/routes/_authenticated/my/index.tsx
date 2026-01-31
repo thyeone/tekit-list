@@ -54,14 +54,12 @@ function RouteComponent() {
   })
 
   const { mutateAsync: uploadFile } = assetsMutations.uploadFile()
-  const { mutate: updateProfile } = userMutations.updateProfile()
+  const { mutate: updateProfile, isPending } = userMutations.updateProfile()
 
   const handleAvatarChange = async (file: File) => {
     const fileAsset = await uploadFile({
       file,
     })
-
-    console.log(fileAsset)
 
     if (fileAsset) {
       form.setValue('avatar', {
@@ -115,7 +113,11 @@ function RouteComponent() {
         </Header>
       }
       onSubmit={onSubmit}
-      bottomFixedButton={<Button type="submit">저장하기</Button>}
+      bottomFixedButton={
+        <Button type="submit" isLoading={isPending}>
+          저장하기
+        </Button>
+      }
     >
       <Col align="center" className="mt-24">
         <Avatar
