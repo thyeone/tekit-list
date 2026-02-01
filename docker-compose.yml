@@ -45,6 +45,7 @@ services:
       DB_DATABASE: ${DB_DATABASE}
       DB_URL: postgresql://${DB_USERNAME}:${DB_PASSWORD}@db:5432/${DB_DATABASE}
       JWT_SECRET: ${JWT_SECRET}
+      SITE_DOMAIN: ${SITE_DOMAIN}
 
   frontend:
     build:
