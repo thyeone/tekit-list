@@ -1,0 +1,873 @@
+{
+  "openapi": "3.0.0",
+  "servers": [
+    {
+      "url": "http://localhost:3088",
+      "description": "Local Server"
+    }
+  ],
+  "info": {
+    "title": "Bucket List API",
+    "version": "1.0.0",
+    "description": "Bucket List API Documentation",
+    "license": {
+      "name": "UNLICENSED"
+    }
+  },
+  "components": {
+    "schemas": {
+      "IFileAsset.RO.Nullable": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "filename",
+          "contentType",
+          "key",
+          "path"
+        ],
+        "nullable": true
+      },
+      "IUser.RO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "nickname": {
+            "type": "string"
+          },
+          "profileImage": {
+            "$ref": "#/components/schemas/IFileAsset.RO.Nullable"
+          }
+        },
+        "required": [
+          "id",
+          "profileImage"
+        ]
+      },
+      "IFileAsset.RO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "filename",
+          "contentType",
+          "key",
+          "path"
+        ]
+      },
+      "IUser.Update": {
+        "type": "object",
+        "properties": {
+          "nickname": {
+            "type": "string"
+          },
+          "profileImageId": {
+            "type": "number"
+          }
+        },
+        "required": []
+      },
+      "IEmoji.RO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "unicode": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "unicode"
+        ]
+      },
+      "IBucket.CountRO": {
+        "type": "object",
+        "properties": {
+          "totalCount": {
+            "type": "number"
+          },
+          "uncompletedCount": {
+            "type": "number"
+          },
+          "completedCount": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "totalCount",
+          "uncompletedCount",
+          "completedCount"
+        ]
+      },
+      "IBucket.PaginatedRO": {
+        "type": "object",
+        "properties": {
+          "rows": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IBucket.RO"
+            }
+          },
+          "nextCursor": {
+            "type": "number"
+          },
+          "hasNext": {
+            "type": "boolean"
+          },
+          "total": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "rows",
+          "hasNext",
+          "total"
+        ]
+      },
+      "IBucket.RO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          },
+          "emoji": {
+            "$ref": "#/components/schemas/Emoji"
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "description": {
+            "type": "string"
+          },
+          "isCompleted": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "emoji",
+          "dueDate",
+          "isCompleted"
+        ]
+      },
+      "Emoji": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "unicode": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "unicode"
+        ]
+      },
+      "IBucket.Create": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "emojiId": {
+            "type": "number"
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date",
+            "description": "목표날짜 (yyyy-mm-dd)"
+          },
+          "description": {
+            "type": "string"
+          },
+          "isCompleted": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "title",
+          "emojiId",
+          "dueDate"
+        ]
+      },
+      "TokenResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "expiresInMilliseconds": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "token",
+          "expiresInMilliseconds"
+        ]
+      },
+      "IFileAsset.RO.o1": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "filename",
+          "contentType",
+          "key",
+          "path"
+        ]
+      },
+      "IFileAsset.Upload": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary"
+          }
+        },
+        "required": [
+          "file"
+        ]
+      }
+    }
+  },
+  "paths": {
+    "/user/me": {
+      "get": {
+        "summary": "내 정보 조회",
+        "description": "현재 로그인한 사용자 정보 조회",
+        "tags": [
+          "User"
+        ],
+        "operationId": "getMe",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IUser.RO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "user",
+          "me",
+          "findMe"
+        ],
+        "x-samchon-controller": "UserController"
+      }
+    },
+    "/user": {
+      "patch": {
+        "summary": "내 정보 수정",
+        "description": "현재 로그인한 사용자 정보 수정",
+        "tags": [
+          "User"
+        ],
+        "operationId": "updateProfile",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IUser.Update"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "user",
+          "updateMe"
+        ],
+        "x-samchon-controller": "UserController"
+      }
+    },
+    "/emoji": {
+      "get": {
+        "summary": "이모지 리스트 조회",
+        "description": "이모지 리스트 조회",
+        "tags": [
+          "Emoji"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "이모지 리스트",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IEmoji.RO"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "emoji",
+          "findAll"
+        ],
+        "x-samchon-controller": "EmojiController"
+      }
+    },
+    "/bucket/count": {
+      "get": {
+        "summary": "버킷 리스트 미완료 개수 조회",
+        "description": "버킷 리스트 미완료 개수 조회",
+        "tags": [
+          "Bucket"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "버킷 리스트 미완료 개수",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IBucket.CountRO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "bucket",
+          "count",
+          "findCount"
+        ],
+        "x-samchon-controller": "BucketController"
+      }
+    },
+    "/bucket": {
+      "get": {
+        "tags": [],
+        "parameters": [
+          {
+            "name": "orderBy",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ASC",
+                "ASC NULLS LAST",
+                "ASC NULLS FIRST",
+                "DESC",
+                "DESC NULLS LAST",
+                "DESC NULLS FIRST",
+                "asc",
+                "asc nulls last",
+                "asc nulls first",
+                "desc",
+                "desc nulls last",
+                "desc nulls first"
+              ]
+            },
+            "required": false
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ALL",
+                "COMPLETED",
+                "INCOMPLETED"
+              ]
+            },
+            "required": false
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "schema": {
+              "type": "number"
+            },
+            "required": false
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "number"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IBucket.PaginatedRO"
+                }
+              }
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "bucket",
+          "findAll"
+        ],
+        "x-samchon-controller": "BucketController"
+      },
+      "post": {
+        "summary": "버킷 리스트 생성",
+        "description": "버킷 리스트 생성",
+        "tags": [
+          "Bucket"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "생성할 버킷 정보",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IBucket.Create"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "생성된 버킷 리스트",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IBucket.RO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "bucket",
+          "create"
+        ],
+        "x-samchon-controller": "BucketController"
+      }
+    },
+    "/bucket/{id}": {
+      "get": {
+        "summary": "버킷 리스트 상세 조회",
+        "description": "버킷 리스트 단건 조회",
+        "tags": [
+          "Bucket"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true,
+            "description": "버킷 ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "버킷 리스트 정보",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IBucket.RO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "bucket",
+          "findOne"
+        ],
+        "x-samchon-controller": "BucketController"
+      },
+      "delete": {
+        "summary": "버킷 리스트 삭제",
+        "description": "버킷 리스트 삭제",
+        "tags": [
+          "Bucket"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true,
+            "description": "삭제할 버킷 ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "bucket",
+          "remove"
+        ],
+        "x-samchon-controller": "BucketController"
+      },
+      "put": {
+        "summary": "버킷 리스트 수정",
+        "description": "버킷 리스트 수정",
+        "tags": [
+          "Bucket"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true,
+            "description": "수정할 버킷 ID"
+          }
+        ],
+        "requestBody": {
+          "description": "수정할 버킷 정보",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IBucket.Create"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "수정된 버킷 리스트",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IBucket.RO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "bucket",
+          "update"
+        ],
+        "x-samchon-controller": "BucketController"
+      }
+    },
+    "/bucket/{id}/complete": {
+      "patch": {
+        "summary": "버킷 리스트 완료 상태 업데이트",
+        "description": "버킷 리스트 완료 처리",
+        "tags": [
+          "Bucket"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true,
+            "description": "완료 상태를 업데이트할 버킷 ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "bucket",
+          "complete",
+          "updateCompleteBucket"
+        ],
+        "x-samchon-controller": "BucketController"
+      }
+    },
+    "/auth/validate": {
+      "get": {
+        "summary": "OAuth 인증 코드 검증",
+        "description": "OAuth 인증 코드 검증",
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "validate",
+        "parameters": [
+          {
+            "name": "provider",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "KAKAO",
+                "GOOGLE"
+              ]
+            },
+            "required": true
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "auth",
+          "validate"
+        ],
+        "x-samchon-controller": "AuthController"
+      }
+    },
+    "/auth/token": {
+      "get": {
+        "summary": "토큰 갱신",
+        "description": "토큰 갱신",
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "getToken",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "auth",
+          "token",
+          "getToken"
+        ],
+        "x-samchon-controller": "AuthController"
+      }
+    },
+    "/assets/file/upload": {
+      "post": {
+        "summary": "파일 업로드",
+        "description": "파일 업로드",
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "uploadFile",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/IFileAsset.Upload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IFileAsset.RO.o1"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "assets",
+          "file",
+          "upload",
+          "uploadFile"
+        ],
+        "x-samchon-controller": "AssetsController"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "User"
+    },
+    {
+      "name": "Emoji"
+    },
+    {
+      "name": "Bucket"
+    },
+    {
+      "name": "Auth"
+    },
+    {
+      "name": "Assets"
+    }
+  ]
+}
