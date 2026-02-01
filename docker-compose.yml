@@ -70,7 +70,7 @@ services:
 
 volumes:
   postgres_data:
-    caddy_data:
-      external: true
-      name: caddy_data
+  caddy_data:
+    external: true
+    name: caddy_data
   caddy_config:
