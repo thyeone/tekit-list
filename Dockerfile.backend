@@ -50,6 +50,8 @@ ENV GENERATE_SOURCEMAP=false
 ENV NODE_OPTIONS=--max-old-space-size=4096
 ENV NODE_ENV=production
 
+RUN npx typia setup
+
 RUN npm run build
 
 CMD ["npm", "run", "start:prod"]
