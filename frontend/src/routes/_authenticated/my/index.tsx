@@ -28,8 +28,8 @@ export const Route = createFileRoute('/_authenticated/my/')({
 const schema = z.object({
   avatar: z
     .object({
-      id: z.number(),
-      path: z.string(),
+      id: z.number().optional(),
+      path: z.string().optional(),
     })
     .optional(),
   nickname: z.string().min(1, {
@@ -69,20 +69,25 @@ function RouteComponent() {
     }
   }
 
-  const onSubmit = form.handleSubmit((data) => {
-    updateProfile(
-      {
-        nickname: data.nickname,
-        profileImageId: data.avatar?.id ?? undefined,
-      },
-      {
-        onSuccess: () => {
-          router.history.back()
-          toast.success('프로필 수정이 완료되었습니다.')
+  const onSubmit = form.handleSubmit(
+    (data) => {
+      updateProfile(
+        {
+          nickname: data.nickname,
+          profileImageId: data.avatar?.id ?? undefined,
         },
-      },
-    )
-  })
+        {
+          onSuccess: () => {
+            router.history.back()
+            toast.success('프로필 수정이 완료되었습니다.')
+          },
+        },
+      )
+    },
+    (error) => {
+      console.log(error)
+    },
+  )
 
   return (
     <Screen
