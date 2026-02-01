@@ -1,10 +1,10 @@
 "use client";
 
-import { createContext, useCallback, useContext, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import { Flex } from "@/headless/ui/Flex";
+import { cn } from "@/utils/cn";
+import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import { cn } from "../libs/cn";
+import { createContext, useCallback, useContext, useState } from "react";
 
 type AccordionContextType = {
   item: Set<string>;
@@ -31,7 +31,7 @@ export const Accordion = ({
         setItem(newItem);
       }
     },
-    [item]
+    [item],
   );
 
   return (
@@ -99,7 +99,7 @@ function Trigger({
             {
               "rotate-180": item.has(value),
             },
-            buttonClassName
+            buttonClassName,
           )}
         />
       </button>
@@ -123,7 +123,7 @@ function Content({
     <motion.div
       className={cn(
         "h-auto overflow-hidden border-b border-gray-100",
-        containerClassName
+        containerClassName,
       )}
     >
       <AnimatePresence>
