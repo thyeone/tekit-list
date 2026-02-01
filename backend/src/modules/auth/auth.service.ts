@@ -30,14 +30,15 @@ export class AuthService {
   }
 
   private get cookieOptions(): CookieOptions {
+    const isProduction: boolean | undefined = this.configService.get('production');
     const domain: string | undefined = this.configService.get('domain');
 
     return {
       sameSite: 'lax',
-      secure: this.configService.get('production'),
+      secure: isProduction,
       path: '/',
       maxAge: 10 * 1000, // 10초
-      domain: domain ? domain.replace('https://', '.') : undefined,
+      domain: isProduction ? '.tekit.click' : undefined,
     };
   }
 
