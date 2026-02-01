@@ -49,7 +49,7 @@ COPY ./backend .
 ENV GENERATE_SOURCEMAP=false
 ENV NODE_OPTIONS=--max-old-space-size=4096
 ENV NODE_ENV=production
+
 RUN npm run build
 
-CMD ["node", "dist/main.js"]
-# CMD ["npm", "run", "start:prod"]
+CMD ["npm", "run", "start:prod"]
