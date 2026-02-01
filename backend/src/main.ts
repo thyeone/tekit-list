@@ -1,3 +1,4 @@
+import { MikroORM } from '@mikro-orm/postgresql';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
@@ -30,6 +31,9 @@ async function bootstrap() {
   }
 
   await app.listen(process.env.PORT ?? 3088);
+
+  await app.get(MikroORM).schema.updateSchema();
+
   console.log(`🚀 Application is running on: ${config.port}`);
 }
 bootstrap();
