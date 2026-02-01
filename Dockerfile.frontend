@@ -11,6 +11,9 @@ ENV VITE_OAUTH_REDIRECT_URI=$VITE_OAUTH_REDIRECT_URI
 COPY frontend/package*.json ./
 RUN npm install
 COPY frontend/ .
+
+COPY backend/swagger.json /backend/swagger.json
+RUN npm run genapi
 RUN npm run build
 
 FROM nginx:stable-alpine
