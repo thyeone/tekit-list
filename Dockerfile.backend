@@ -1,4 +1,4 @@
-FROM node:24
+FROM node:20-alpine
 
 # Set the timezone to Asia/Seoul
 ENV TZ=Asia/Seoul
@@ -51,4 +51,5 @@ ENV NODE_OPTIONS=--max-old-space-size=4096
 ENV NODE_ENV=production
 RUN npm run build
 
-CMD ["npm", "run", "start:prod"]
+CMD ["node", "dist/main.js"]
+# CMD ["npm", "run", "start:prod"]
