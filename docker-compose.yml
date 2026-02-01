@@ -16,6 +16,7 @@ services:
       context: .
       dockerfile: Dockerfile.backend
       args:
+        DB_HOST: ${DB_HOST}
         PORT: ${PORT}
         CORS_ORIGIN: ${CORS_ORIGIN}
         DB_USERNAME: ${DB_USERNAME}
