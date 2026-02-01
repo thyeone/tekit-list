@@ -18,7 +18,7 @@ const getMikroOrmConfig = (configService: ConfigService): Options => {
     user: configService.get('DB_USERNAME'),
     password: configService.get('DB_PASSWORD'),
     dbName: 'postgres',
-    clientUrl: configService.get('DB_URL') || 'postgresql://postgres:postgres@localhost:5432/postgres',
+    // clientUrl: configService.get('DB_URL') || 'postgresql://postgres:postgres@localhost:5432/postgres',
     entities: ['./dist/**/*.entity.js'],
     entitiesTs: ['./src/**/*.entity.ts'],
     debug: true,
