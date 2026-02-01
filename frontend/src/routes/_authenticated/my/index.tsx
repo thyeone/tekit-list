@@ -130,7 +130,12 @@ function RouteComponent() {
             })
           }}
         />
-        <FormTextField control={form.control} name="nickname" label="닉네임" />
+        <FormTextField
+          control={form.control}
+          name="nickname"
+          label="닉네임"
+          placeholder="닉네임을 입력해주세요"
+        />
       </Col>
     </Screen>
   )
