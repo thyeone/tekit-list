@@ -16,6 +16,9 @@ export const bucketMutations = {
         api().bucket.completePartialUpdate(params),
       onSuccess: () => {
         queryClient.invalidateQueries({
+          queryKey: bucketKeys.count(),
+        })
+        queryClient.invalidateQueries({
           queryKey: bucketKeys.list.all(),
         })
       },
