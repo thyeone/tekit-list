@@ -9,6 +9,7 @@ export default defineConfig({
   plugins: [
     tanstackRouter({
       target: 'react',
+      routeFileIgnorePattern: 'components',
     }),
     react(),
     tailwindcss(),
