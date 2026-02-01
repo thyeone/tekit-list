@@ -50,6 +50,8 @@ ENV GENERATE_SOURCEMAP=false
 ENV NODE_OPTIONS=--max-old-space-size=4096
 ENV NODE_ENV=production
 
+# Nestia/typia transform 적용을 위해 ts-patch 필수 (빌드 전 패치)
+RUN npm run prepare
 RUN npm run build
 
 CMD ["npm", "run", "start:prod"]

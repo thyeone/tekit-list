@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "prepare": "ts-patch install && typia patch",
     "build": "nest build",
     "db": "docker compose -f docker-compose.dev.yml up",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
