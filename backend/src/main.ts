@@ -32,6 +32,7 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT ?? 3088);
 
+  await app.get(MikroORM).schema.ensureDatabase();
   await app.get(MikroORM).schema.updateSchema();
 
   console.log(`🚀 Application is running on: ${config.port}`);
