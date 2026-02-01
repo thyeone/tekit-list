@@ -32,7 +32,7 @@ export function Screen({
       {bottomFixedButton && (
         <Flex
           center
-          className="pointer-events-none fixed inset-x-0 bottom-0 z-50 mx-auto max-w-mobile pt-10 pb-20"
+          className="pointer-events-none fixed inset-x-0 bottom-0 z-50 mx-auto max-w-mobile px-16 pt-10 pb-20"
         >
           <Box className="pointer-events-auto w-full">{bottomFixedButton}</Box>
         </Flex>
