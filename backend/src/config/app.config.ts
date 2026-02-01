@@ -1,5 +1,6 @@
 export const appConfig = () => ({
   port: process.env.PORT || 3088,
+  domain: process.env.DOMAIN,
   oauth: {
     redirectUri: process.env.OAUTH_REDIRECT_URI,
     kakao: {
