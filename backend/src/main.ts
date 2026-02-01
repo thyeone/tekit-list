@@ -1,4 +1,4 @@
-import { MikroORM } from '@mikro-orm/postgresql';
+import { MikroORM } from '@mikro-orm/core';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
@@ -6,6 +6,7 @@ import { appConfig } from './config/app.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const orm = app.get(MikroORM);
 
   const config = appConfig();
 
@@ -30,10 +31,10 @@ async function bootstrap() {
     console.log('✅ Swagger UI: http://localhost:3088/api-docs');
   }
 
-  await app.listen(process.env.PORT ?? 3088);
+  await orm.schema.ensureDatabase();
+  await orm.schema.updateSchema();
 
-  await app.get(MikroORM).schema.ensureDatabase();
-  await app.get(MikroORM).schema.updateSchema();
+  await app.listen(process.env.PORT ?? 3088);
 
   console.log(`🚀 Application is running on: ${config.port}`);
 }
