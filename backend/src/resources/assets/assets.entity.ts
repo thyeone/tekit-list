@@ -25,7 +25,6 @@ export class FileAsset {
   path!: string;
 
   static buildRO(asset: FileAsset): IFileAsset.RO {
-    console.log(asset, '==ast=sfas');
     return {
       id: asset.id,
       filename: asset.filename,

@@ -22,7 +22,7 @@ export class Bucket {
   @ManyToOne()
   user!: User;
 
-  @ManyToOne()
+  @ManyToOne(() => Emoji)
   emoji!: Emoji;
 
   @Property()
@@ -40,7 +40,7 @@ export class Bucket {
     return {
       id: bucket.id,
       title: bucket.title,
-      emoji: bucket.emoji,
+      emoji: Emoji.buildRO(bucket.emoji),
       dueDate: bucket.dueDate,
       description: bucket.description,
       isCompleted: bucket.isCompleted || false,

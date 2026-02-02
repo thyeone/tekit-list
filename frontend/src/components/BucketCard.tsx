@@ -1,5 +1,6 @@
 import { bucketMutations } from '@/apis/bucket/mutaitons'
 import { Check } from '@/headless/icon/svgs'
+import { Image } from '@/headless/Image'
 import { Flex, Row } from '@/headless/ui/Flex'
 import { cn } from '@/utils/cn'
 import { Link } from '@tanstack/react-router'
@@ -37,7 +38,13 @@ export function BucketCard({ bucket }: { bucket: IBucketRO }) {
         )}
       </Flex>
       <Row gap={12} align="center">
-        <span className="text-2xl">{bucket.emoji.unicode}</span>
+        <Image
+          src={bucket.emoji.image?.path}
+          alt={bucket.emoji.name}
+          width={24}
+          height={24}
+          className="rounded-full"
+        />
         <p
           className={cn('font-medium text-base text-grey-900', {
             'text-gray-400 line-through': bucket.isCompleted,

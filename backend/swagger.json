@@ -126,6 +126,39 @@
         },
         "required": []
       },
+      "IFileAsset.RO.o1.Nullable": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "filename",
+          "contentType",
+          "key",
+          "path"
+        ],
+        "nullable": true
+      },
       "IEmoji.RO": {
         "type": "object",
         "properties": {
@@ -135,14 +168,46 @@
           "name": {
             "type": "string"
           },
-          "unicode": {
-            "type": "string"
+          "image": {
+            "$ref": "#/components/schemas/IFileAsset.RO.o1.Nullable"
           }
         },
         "required": [
           "id",
           "name",
-          "unicode"
+          "image"
+        ]
+      },
+      "IFileAsset.RO.o1": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "filename",
+          "contentType",
+          "key",
+          "path"
         ]
       },
       "IBucket.CountRO": {
@@ -199,7 +264,7 @@
             "type": "string"
           },
           "emoji": {
-            "$ref": "#/components/schemas/Emoji"
+            "$ref": "#/components/schemas/IEmoji.RO.o1"
           },
           "dueDate": {
             "type": "string",
@@ -220,7 +285,40 @@
           "isCompleted"
         ]
       },
-      "Emoji": {
+      "IFileAsset.RO.o2.Nullable": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "filename",
+          "contentType",
+          "key",
+          "path"
+        ],
+        "nullable": true
+      },
+      "IEmoji.RO.o1": {
         "type": "object",
         "properties": {
           "id": {
@@ -229,14 +327,46 @@
           "name": {
             "type": "string"
           },
-          "unicode": {
-            "type": "string"
+          "image": {
+            "$ref": "#/components/schemas/IFileAsset.RO.o2.Nullable"
           }
         },
         "required": [
           "id",
           "name",
-          "unicode"
+          "image"
+        ]
+      },
+      "IFileAsset.RO.o2": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "filename",
+          "contentType",
+          "key",
+          "path"
         ]
       },
       "IBucket.Create": {
@@ -266,7 +396,7 @@
           "dueDate"
         ]
       },
-      "IFileAsset.RO.o1": {
+      "IFileAsset.RO.o3": {
         "type": "object",
         "properties": {
           "id": {
@@ -832,7 +962,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/IFileAsset.RO.o1"
+                  "$ref": "#/components/schemas/IFileAsset.RO.o3"
                 }
               }
             }

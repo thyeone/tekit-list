@@ -1,5 +1,6 @@
 import type { IEmoji } from '@/Interfaces/emoji';
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import { FileAsset } from '../assets/assets.entity';
 
 @Entity()
 export class Emoji {
@@ -9,14 +10,14 @@ export class Emoji {
   @Property()
   name!: string;
 
-  @Property()
-  unicode!: string;
+  @ManyToOne(() => FileAsset, { nullable: true })
+  image: FileAsset | null = null;
 
   static buildRO(emoji: Emoji): IEmoji.RO {
     return {
       id: emoji.id,
       name: emoji.name,
-      unicode: emoji.unicode,
+      image: emoji.image ? FileAsset.buildRO(emoji.image) : null,
     };
   }
 }

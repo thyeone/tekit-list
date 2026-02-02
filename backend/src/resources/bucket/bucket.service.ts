@@ -38,7 +38,7 @@ export class BucketService {
 
     const [buckets, totalCount] = await this.em.findAndCount(Bucket, where, {
       orderBy: { createdAt: orderBy.createdAt, id: orderBy.createdAt },
-      populate: ['emoji'],
+      populate: ['emoji', 'emoji.image'],
       limit: limit + 1,
     });
 
@@ -51,7 +51,7 @@ export class BucketService {
   }
 
   async findOne(userId: number, id: number): Promise<IBucket.RO> {
-    const bucket = await this.em.findOne(Bucket, { id, user: { id: userId } }, { populate: ['emoji'] });
+    const bucket = await this.em.findOne(Bucket, { id, user: { id: userId } }, { populate: ['emoji', 'emoji.image'] });
 
     if (!bucket) {
       throw new NotFoundException('Bucket not found');
@@ -84,7 +84,7 @@ export class BucketService {
       throw new NotFoundException('User not found');
     }
 
-    const emoji = await this.em.findOne(Emoji, { id: Number(create.emojiId) });
+    const emoji = await this.em.findOne(Emoji, { id: Number(create.emojiId) }, { populate: ['image'] });
     if (!emoji) {
       throw new NotFoundException('Emoji not found');
     }
@@ -121,7 +121,7 @@ export class BucketService {
   }
 
   async update(userId: number, id: number, update: IBucket.Create): Promise<IBucket.RO> {
-    const bucket = await this.em.findOne(Bucket, { id, user: { id: userId } }, { populate: ['emoji'] });
+    const bucket = await this.em.findOne(Bucket, { id, user: { id: userId } }, { populate: ['emoji', 'emoji.image'] });
 
     if (!bucket) {
       throw new NotFoundException('Bucket not found');

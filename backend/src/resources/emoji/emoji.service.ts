@@ -8,7 +8,7 @@ export class EmojiService {
   constructor(private readonly em: EntityManager) {}
 
   async findAll(): Promise<IEmoji.RO[]> {
-    const emojis = await this.em.find(Emoji, {});
+    const emojis = await this.em.find(Emoji, {}, { populate: ['image'] });
 
     return emojis.map((emoji) => Emoji.buildRO(emoji));
   }

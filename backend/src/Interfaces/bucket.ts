@@ -1,4 +1,4 @@
-import { Emoji } from '@/resources/emoji/emoji.entity';
+import type { IEmoji } from '@/Interfaces/emoji';
 import { IGeneral } from './general';
 
 export namespace IBucket {
@@ -17,7 +17,7 @@ export namespace IBucket {
   export interface RO {
     id: number;
     title: string;
-    emoji: Emoji;
+    emoji: IEmoji.RO;
     dueDate: Date;
     description?: string;
     isCompleted: boolean;

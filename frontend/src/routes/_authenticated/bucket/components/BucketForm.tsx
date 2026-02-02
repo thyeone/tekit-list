@@ -9,11 +9,12 @@ import { FormTextField } from '@/components/common/TextField'
 import { Toggle } from '@/components/common/Toggle'
 import { DatePicker } from '@/components/DatePicker'
 import { EmojiPicker } from '@/components/EmojiPicker'
+import { Image } from '@/headless/Image'
 import { Col, Flex } from '@/headless/ui/Flex'
 import { Spacing } from '@/headless/ui/Spacing'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from '@tanstack/react-router'
-import type { Emoji, IBucketRO } from 'api'
+import type { IBucketRO, IEmojiRO } from 'api'
 import dayjs from 'dayjs'
 import { overlay } from 'overlay-kit'
 import { useForm } from 'react-hook-form'
@@ -23,7 +24,7 @@ const schema = z.object({
   emoji: z.object({
     id: z.number(),
     name: z.string(),
-    unicode: z.string(),
+    path: z.string(),
   }),
   title: z.string().min(1, {
     message: '제목을 입력해주세요',
@@ -37,7 +38,7 @@ const schema = z.object({
 
 type BucketFormProps = {
   bucket?: IBucketRO
-  emoji: Emoji[]
+  emoji: IEmojiRO[]
 }
 
 export function BucketForm({ bucket, emoji }: BucketFormProps) {
@@ -48,10 +49,16 @@ export function BucketForm({ bucket, emoji }: BucketFormProps) {
   const { mutate: updateMutate, isPending: isUpdatePending } =
     bucketMutations.update()
 
+  console.log(emoji)
+
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
-      emoji: bucket?.emoji ?? (emoji?.[0] as Emoji),
+      emoji: {
+        id: bucket?.emoji?.id ?? emoji?.[0]?.id ?? undefined,
+        name: bucket?.emoji?.name ?? emoji?.[0]?.name ?? '',
+        path: bucket?.emoji?.image?.path ?? emoji?.[0]?.image?.path ?? '',
+      },
       title: bucket?.title ?? '',
       dueDate: bucket?.dueDate ? new Date(bucket.dueDate) : undefined,
       description: bucket?.description ?? '',
@@ -125,15 +132,25 @@ export function BucketForm({ bucket, emoji }: BucketFormProps) {
                   const __emoji = emoji?.find((e) => e.id === emojiId)
 
                   if (__emoji) {
-                    form.setValue('emoji', __emoji)
+                    form.setValue('emoji', {
+                      id: __emoji.id,
+                      name: __emoji.name,
+                      path: __emoji.image?.path ?? '',
+                    })
                   }
                 }}
               />
             ))
           }}
-          className="size-100 rounded-full bg-gray-50 transition-all hover:bg-gray-100"
+          className="relative size-120 rounded-full bg-gray-50 transition-all hover:bg-gray-100"
         >
-          <p className="text-[48px]">{form.watch('emoji')?.unicode}</p>
+          <Image
+            src={form.watch('emoji').path}
+            alt={form.watch('emoji')?.name}
+            width={72}
+            height={72}
+            className="z-10"
+          />
         </Flex>
       </Col>
       <Col gap={8}>

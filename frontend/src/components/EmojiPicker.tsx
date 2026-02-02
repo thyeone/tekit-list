@@ -7,6 +7,7 @@ import { cn } from '@/utils/cn'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { Sheet } from './common/Sheet'
+import { Image } from '@/headless/Image'
 
 type EmojiPickerProps = {
   onSelect: (emojiId: number) => void
@@ -67,7 +68,13 @@ export function EmojiPicker({
               </Flex>
             )}
             <Flex center gap={8} className="text-3xl">
-              {emoji.unicode}
+              <Image
+                src={emoji.image?.path}
+                alt={emoji.name}
+                width={32}
+                height={32}
+                className="z-10"
+              />
             </Flex>
             <p
               className={cn('font-semibold text-sm', {
