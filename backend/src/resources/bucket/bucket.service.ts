@@ -136,6 +136,8 @@ export class BucketService {
 
       bucket.emoji = emoji;
     }
+
+    if (update.title !== undefined) bucket.title = update.title;
     if (update.dueDate !== undefined) bucket.dueDate = new Date(update.dueDate);
     if (update.description !== undefined) bucket.description = update.description;
     if (update.isCompleted !== undefined) bucket.isCompleted = update.isCompleted;
