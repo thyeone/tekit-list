@@ -27,7 +27,7 @@
     "schema:update": "mikro-orm schema:update --run",
     "schema:drop": "mikro-orm schema:drop --run",
     "seed:fresh": "cross-env SEED=1 mikro-orm schema:fresh --run=true --seed DummySeeder",
-    "seed": "cross-env SEED=1 mikro-orm seeder:run -c DummySeeder",
+    "seed:run": "cross-env SEED=1 mikro-orm seeder:run --class=DummySeeder",
     "sdk:swagger": "npx @nestia/sdk swagger"
   },
   "dependencies": {
