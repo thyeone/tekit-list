@@ -16,21 +16,6 @@
   },
   "components": {
     "schemas": {
-      "TokenResponse": {
-        "type": "object",
-        "properties": {
-          "token": {
-            "type": "string"
-          },
-          "expiresInMilliseconds": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "token",
-          "expiresInMilliseconds"
-        ]
-      },
       "IFileAsset.RO.Nullable": {
         "type": "object",
         "properties": {
@@ -439,84 +424,25 @@
         "required": [
           "file"
         ]
+      },
+      "TokenResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "expiresInMilliseconds": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "token",
+          "expiresInMilliseconds"
+        ]
       }
     }
   },
   "paths": {
-    "/auth/validate": {
-      "get": {
-        "summary": "OAuth 인증 코드 검증",
-        "description": "OAuth 인증 코드 검증",
-        "tags": [
-          "Auth"
-        ],
-        "operationId": "validate",
-        "parameters": [
-          {
-            "name": "provider",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "KAKAO",
-                "GOOGLE"
-              ]
-            },
-            "required": true
-          },
-          {
-            "name": "code",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {}
-            }
-          }
-        },
-        "x-samchon-accessor": [
-          "auth",
-          "validate"
-        ],
-        "x-samchon-controller": "AuthController"
-      }
-    },
-    "/auth/token": {
-      "get": {
-        "summary": "토큰 갱신",
-        "description": "토큰 갱신",
-        "tags": [
-          "Auth"
-        ],
-        "operationId": "getToken",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TokenResponse"
-                }
-              }
-            }
-          }
-        },
-        "x-samchon-accessor": [
-          "auth",
-          "token",
-          "getToken"
-        ],
-        "x-samchon-controller": "AuthController"
-      }
-    },
     "/user/me": {
       "get": {
         "summary": "내 정보 조회",
@@ -981,12 +907,83 @@
         ],
         "x-samchon-controller": "AssetsController"
       }
+    },
+    "/auth/validate": {
+      "get": {
+        "summary": "OAuth 인증 코드 검증",
+        "description": "OAuth 인증 코드 검증",
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "validate",
+        "parameters": [
+          {
+            "name": "provider",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "KAKAO",
+                "GOOGLE"
+              ]
+            },
+            "required": true
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "auth",
+          "validate"
+        ],
+        "x-samchon-controller": "AuthController"
+      }
+    },
+    "/auth/token": {
+      "get": {
+        "summary": "토큰 갱신",
+        "description": "토큰 갱신",
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "getToken",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "auth",
+          "token",
+          "getToken"
+        ],
+        "x-samchon-controller": "AuthController"
+      }
     }
   },
   "tags": [
-    {
-      "name": "Auth"
-    },
     {
       "name": "User"
     },
@@ -998,6 +995,9 @@
     },
     {
       "name": "Assets"
+    },
+    {
+      "name": "Auth"
     }
   ]
 }

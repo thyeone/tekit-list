@@ -128,7 +128,7 @@ export class BucketService {
     }
 
     if (update.emojiId !== undefined) {
-      const emoji = await this.em.findOne(Emoji, { id: Number(update.emojiId) });
+      const emoji = await this.em.findOne(Emoji, { id: Number(update.emojiId) }, { populate: ['image'] });
 
       if (!emoji) {
         throw new NotFoundException('Emoji not found');

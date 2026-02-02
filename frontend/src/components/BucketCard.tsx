@@ -43,7 +43,6 @@ export function BucketCard({ bucket }: { bucket: IBucketRO }) {
           alt={bucket.emoji.name}
           width={24}
           height={24}
-          className="rounded-full"
         />
         <p
           className={cn('font-medium text-base text-grey-900', {
